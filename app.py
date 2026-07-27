@@ -46,7 +46,7 @@ st.write("---")
 try:
     # Usamos la conexión oficial llamando al módulo externo importado arriba
     conn = st.connection("gsheets", type=GSheetsConnection)
-    df_actual = conn.read(spreadsheet=st.secrets["url_hoja"], ttl=0)
+    df_actual = conn.read(ttl=0)
 except Exception as e:
     st.error(f"⚠️ Error al conectar con Google Sheets. Detalles: {e}")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
