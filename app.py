@@ -43,10 +43,10 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
 # --- CONEXIÓN DIRECTA CON TU ID DE GOOGLE SHEETS ---
-URL_EXCEL = "https://google.com"
+URL_EXCEL = "https://google.com
 
 try:
-    df_actual = pd.read_excel(URL_EXCEL, engine="openpyxl")
+    df_actual = pd.read_html(URL_EXCEL, header=0)[0]
 except Exception as e:
     st.error(f"⚠️ Error de conexión. Detalles: {e}")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
