@@ -43,14 +43,10 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
 # --- CONEXIÓN DIRECTA CON TU ID DE GOOGLE SHEETS ---
-# REEMPLAZA "Hoja 1" por el nombre real de tu pestaña de Google Sheets (mantén las comillas)
-NOMBRE_PESTANA = "Hoja%201"
-
-ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
-URL_EXCEL = f"https://google.com{ID_HOJA}/gviz/tq?tqx=out:csv&sheet={NOMBRE_PESTANA}"
+URL_EXCEL = "https://google.com"
 
 try:
-    # Lector de texto nativo rápido, inmune a bloqueos de caché
+    # Lector directo sin procesos adicionales de red
     df_actual = pd.read_csv(URL_EXCEL)
 except Exception as e:
     st.error(f"⚠️ Error de lectura. Detalles: {e}")
