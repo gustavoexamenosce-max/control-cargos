@@ -6,16 +6,14 @@ from datetime import datetime, date
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="📋")
 
 # --- CONTROL DE ACCESO (SISTEMA DE CONTRASEÑA) ---
-# Inicializamos el estado de la autenticación si no existe
 if "autenticado" not in st.session_state:
     st.session_state.autenticado = False
 
-# Función para verificar la contraseña guardada en Secrets
+# Función callback corregida (eliminamos st.rerun() porque Streamlit reinicia solo)
 def verificar_password():
     if st.session_state["password_ingresada"] == st.secrets["password_sistema"]:
         st.session_state.autenticado = True
-        st.success("🔓 Acceso concedido.")
-        st.rerun()
+        st.toast("🔓 Acceso concedido.") # Muestra una notificación pequeña temporal
     else:
         st.error("❌ Contraseña incorrecta. Inténtalo de nuevo.")
 
@@ -24,22 +22,18 @@ if not st.session_state.autenticado:
     st.markdown("<h2 style='text-align: center;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: gray;'>Introduce la clave de acceso para el Control de Cargos</p>", unsafe_allow_html=True)
     
-    # Campo de texto tipo password (oculta los caracteres con puntitos)
     st.text_input(
         "Contraseña del Sistema:", 
         type="password", 
         key="password_ingresada", 
         on_change=verificar_password
     )
-    st.stop() # Detiene la ejecución del código aquí para que no cargue nada más
-
-# =========================================================================
-# EL CÓDIGO SIGUIENTE SOLO SE EJECUTA SI LA CONTRASEÑA ES CORRECTA
-# =========================================================================
+    st.stop()
 
 # --- Botón de cerrar sesión en la barra lateral ---
 if st.sidebar.button("🔒 Cerrar Sesión"):
     st.session_state.autenticado = False
+    # Aquí sí se permite st.rerun() porque está en un bloque "if" normal, no en un callback
     st.rerun()
 
 # --- ENCABEZADO SOLICITADO ---
@@ -49,8 +43,7 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
 # --- CONEXIÓN DIRECTA CON TU ID DE GOOGLE SHEETS ---
-ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
-URL_EXCEL = f"https://google.com{ID_HOJA}/export?id={ID_HOJA}&format=xlsx"
+URL_EXCEL = "https://google.com"
 
 try:
     df_actual = pd.read_excel(URL_EXCEL, engine="openpyxl")
