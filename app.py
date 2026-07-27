@@ -10,15 +10,16 @@ st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Control de
 st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
-
-# --- CONEXIÓN DIRECTA CON TU ID DE GOOGLE SHEETS ---
+# --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
 ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
-URL_EXCEL = f"https://google.com{ID_HOJA}/export?format=xlsx"
+# Usamos la ruta oficial de exportación de Google Drive para evitar bloqueos
+URL_EXCEL = f"https://docs.google.com/spreadsheets/d/{ID_HOJA}/export?id={ID_HOJA}&format=xlsx"
 
 try:
-    df_actual = pd.read_excel(URL_EXCEL)
+    # Agregamos el motor openpyxl explícitamente para asegurar la lectura
+    df_actual = pd.read_excel(URL_EXCEL, engine="openpyxl")
 except Exception as e:
-    st.error("⚠️ La hoja de Google Sheets sigue privada. Verifica el botón Compartir.")
+    st.error(f"⚠️ Error de conexión. Detalles: {e}")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
