@@ -9,11 +9,10 @@ st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon=
 if "autenticado" not in st.session_state:
     st.session_state.autenticado = False
 
-# Función callback corregida (eliminamos st.rerun() porque Streamlit reinicia solo)
 def verificar_password():
     if st.session_state["password_ingresada"] == st.secrets["password_sistema"]:
         st.session_state.autenticado = True
-        st.toast("🔓 Acceso concedido.") # Muestra una notificación pequeña temporal
+        st.toast("🔓 Acceso concedido.")
     else:
         st.error("❌ Contraseña incorrecta. Inténtalo de nuevo.")
 
@@ -33,7 +32,6 @@ if not st.session_state.autenticado:
 # --- Botón de cerrar sesión en la barra lateral ---
 if st.sidebar.button("🔒 Cerrar Sesión"):
     st.session_state.autenticado = False
-    # Aquí sí se permite st.rerun() porque está en un bloque "if" normal, no en un callback
     st.rerun()
 
 # --- ENCABEZADO SOLICITADO ---
@@ -42,11 +40,11 @@ st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Contr
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
-# --- CONEXIÓN DIRECTA CON TU ID DE GOOGLE SHEETS ---
+# --- CONEXIÓN DE EXPORTACIÓN CSV DIRECTA (PRIMERA PESTAÑA GID=0) ---
 URL_EXCEL = "https://google.com"
 
 try:
-    # Lector directo sin procesos adicionales de red
+    # Lector de texto nativo rápido, libre de códigos extraños de Google
     df_actual = pd.read_csv(URL_EXCEL)
 except Exception as e:
     st.error(f"⚠️ Error de lectura. Detalles: {e}")
