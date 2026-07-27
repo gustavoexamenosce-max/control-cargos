@@ -49,7 +49,7 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
 # --- CONEXIÓN DIRECTA CON TU ID DE GOOGLE SHEETS ---
-ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fE777SSSwxz9KJ8VEQ"
+ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
 URL_EXCEL = f"https://google.com{ID_HOJA}/export?id={ID_HOJA}&format=xlsx"
 
 try:
