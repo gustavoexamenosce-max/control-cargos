@@ -40,16 +40,13 @@ st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Chicl
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
-# --- CONEXIÓN DE EXPORTACIÓN DIRECTA REPARADA ---
-ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fE777SSSwxz9KJ8VEQ"
-# Usamos el formato nativo de exportación de Google Drive para saltar filtros web
-URL_LIMPIA = f"https://google.com{ID_HOJA}/export?format=csv&gid=0"
+URL_EXCEL = "https://google.com"
 
 try:
-    # Lector directo en texto plano (Inmune a bloqueos 404)
-    df_actual = pd.read_csv(URL_LIMPIA)
+    # Lector directo sin procesos adicionales de red
+    df_actual = pd.read_csv(URL_EXCEL)
 except Exception as e:
-    st.error(f"⚠️ Error al conectar con Google Sheets. Detalles: {e}")
+    st.error(f"⚠️ Error de lectura. Detalles: {e}")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
