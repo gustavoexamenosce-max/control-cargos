@@ -13,8 +13,8 @@ st.write("---")
 # --- CONEXIÓN DIRECTA A GOOGLE SHEETS EN LA NUBE ---
 # PEGA AQUÍ TU ENLACE COMPLETO DE GOOGLE SHEETS (El que copiaste en el paso 1)
 # Asegúrate de cambiar el final del enlace para que termine en '/export?format=csv' en lugar de '/edit...'
-URL_BASE = "https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ/edit?usp=sharing"
-URL_CSV = f"{URL_BASE}/export?format=csv"
+URL_BASE = "https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ/edit?gid=0#gid=0"
+URL_CSV = f"https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ/edit?gid=0#gid=0/export?format=csv"
 
 @st.cache_data(ttl="0d")  # ttl=0 obliga a leer los datos reales de la nube cada vez
 @st.cache_data(ttl=0)
