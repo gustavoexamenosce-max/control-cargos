@@ -10,7 +10,6 @@ st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Hospital L
 st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Control de Cargos de Pecosas</h3>", unsafe_allow_html=True)
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
-
 # --- CONEXIÓN DIRECTA A GOOGLE SHEETS EN LA NUBE ---
 # PEGA AQUÍ TU ENLACE COMPLETO DE GOOGLE SHEETS (El que copiaste en el paso 1)
 # Asegúrate de cambiar el final del enlace para que termine en '/export?format=csv' en lugar de '/edit...'
@@ -18,22 +17,15 @@ URL_BASE = "https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r
 URL_CSV = f"{URL_BASE}/export?format=csv"
 
 @st.cache_data(ttl="0d")  # ttl=0 obliga a leer los datos reales de la nube cada vez
-def cargar_datos():
-    try:
-        return pd.read_csv(URL_CSV)
-    except:
-        return pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
+@st.cache_data(ttl=0)
+def cargar_datos_reales(url):
+    return pd.read_csv(url)
 
-df = cargar_datos()
-
-# Conexión para guardar datos (usando solicitudes web estándar de Google Forms o gspread)
-# Para mantenerlo 100% libre de errores TOML, el registro se guardará directamente en memoria
-# y podrás descargar tus reportes en tiempo real. 
-if "cargos_db" not in st.session_state:
-    st.session_state.cargos_db = df
-
-df_actual = st.session_state.cargos_db
-
+try:
+    df_actual = cargar_datos_reales(URL_CSV)
+except Exception as e:
+    st.error("Error al conectar con la hoja de cálculo pública.")
+    df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
          7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
