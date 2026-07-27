@@ -5,18 +5,54 @@ from datetime import datetime, date
 # --- Configuración visual para móviles ---
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="📋")
 
+# --- CONTROL DE ACCESO (SISTEMA DE CONTRASEÑA) ---
+# Inicializamos el estado de la autenticación si no existe
+if "autenticado" not in st.session_state:
+    st.session_state.autenticado = False
+
+# Función para verificar la contraseña guardada en Secrets
+def verificar_password():
+    if st.session_state["password_ingresada"] == st.secrets["password_sistema"]:
+        st.session_state.autenticado = True
+        st.success("🔓 Acceso concedido.")
+        st.rerun()
+    else:
+        st.error("❌ Contraseña incorrecta. Inténtalo de nuevo.")
+
+# Si NO está autenticado, mostramos la pantalla de bloqueo
+if not st.session_state.autenticado:
+    st.markdown("<h2 style='text-align: center;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: gray;'>Introduce la clave de acceso para el Control de Cargos</p>", unsafe_allow_html=True)
+    
+    # Campo de texto tipo password (oculta los caracteres con puntitos)
+    st.text_input(
+        "Contraseña del Sistema:", 
+        type="password", 
+        key="password_ingresada", 
+        on_change=verificar_password
+    )
+    st.stop() # Detiene la ejecución del código aquí para que no cargue nada más
+
+# =========================================================================
+# EL CÓDIGO SIGUIENTE SOLO SE EJECUTA SI LA CONTRASEÑA ES CORRECTA
+# =========================================================================
+
+# --- Botón de cerrar sesión en la barra lateral ---
+if st.sidebar.button("🔒 Cerrar Sesión"):
+    st.session_state.autenticado = False
+    st.rerun()
+
 # --- ENCABEZADO SOLICITADO ---
-st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Hospital Regional Docente Las Mercedes Chiclayo</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Control de Cargos de Pecosas</h3>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Control de Cargos de Pecosas</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
-# --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
-ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
-# Usamos la ruta oficial de exportación de Google Drive para evitar bloqueos
-URL_EXCEL = f"https://docs.google.com/spreadsheets/d/{ID_HOJA}/export?id={ID_HOJA}&format=xlsx"
+
+# --- CONEXIÓN DIRECTA CON TU ID DE GOOGLE SHEETS ---
+ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fE777SSSwxz9KJ8VEQ"
+URL_EXCEL = f"https://google.com{ID_HOJA}/export?id={ID_HOJA}&format=xlsx"
 
 try:
-    # Agregamos el motor openpyxl explícitamente para asegurar la lectura
     df_actual = pd.read_excel(URL_EXCEL, engine="openpyxl")
 except Exception as e:
     st.error(f"⚠️ Error de conexión. Detalles: {e}")
