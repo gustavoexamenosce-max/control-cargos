@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime, date
+# IMPORTACIÓN OFICIAL REQUERIDA PARA EVITAR EL ERROR DE ATRIBUTO
+from streamlit_gsheets import GSheetsConnection
 
 # --- Configuración visual para móviles ---
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="📋")
@@ -42,8 +44,8 @@ st.write("---")
 
 # --- CONEXIÓN OFICIAL SEGURA CON GOOGLE SHEETS ---
 try:
-    # Usamos el conector oficial cargando la URL desde los Secrets de la app
-    conn = st.connection("gsheets", type=st.connection.GSheetsConnection)
+    # Usamos la conexión oficial llamando al módulo externo importado arriba
+    conn = st.connection("gsheets", type=GSheetsConnection)
     df_actual = conn.read(spreadsheet=st.secrets["url_hoja"], ttl=0)
 except Exception as e:
     st.error(f"⚠️ Error al conectar con Google Sheets. Detalles: {e}")
