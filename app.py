@@ -35,26 +35,18 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
     st.rerun()
 
 # --- ENCABEZADO SOLICITADO ---
-st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Hospital Regional Docente Las Mercedes Chiclayo</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Control de Cargos de Pecosas</h3>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Control de Cargos de Pecosas</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
-# --- CONEXIÓN DE EXPORTACIÓN INMUNE A BLOQUEOS DE RED ---
-ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
-# Cambiamos la petición a formato de descarga universal para saltar filtros web de Google
-URL_LIMPIA = f"https://google.com{ID_HOJA}&output=csv"
-
+# --- CONEXIÓN OFICIAL SEGURA CON GOOGLE SHEETS ---
 try:
-    # Lector de datos directo por bloques de texto planos
-    df_actual = pd.read_csv(URL_LIMPIA)
-    
-    # Si por error jala código de página web en vez de datos de Chiclayo, lanzamos un aviso limpio
-    if df_actual.empty or "html" in str(df_actual.columns[0]).lower() or "<!doctype" in str(df_actual.columns[0]).lower():
-        st.warning("⚠️ Google está procesando la sincronización de la hoja. Si el mensaje persiste, verifica que tu archivo en Drive esté en modo 'Cualquier persona con el enlace'.")
-        df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
+    # Usamos el conector oficial cargando la URL desde los Secrets de la app
+    conn = st.connection("gsheets", type=st.connection.GSheetsConnection)
+    df_actual = conn.read(spreadsheet=st.secrets["url_hoja"], ttl=0)
 except Exception as e:
-    st.error("⚠️ No se pudo conectar a la base de datos de Google Sheets.")
+    st.error(f"⚠️ Error al conectar con Google Sheets. Detalles: {e}")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
@@ -93,7 +85,7 @@ if opcion == "📥 Registrar Cargo":
             if not recibido_por:
                 st.error("❌ Por seguridad, debes ingresar el nombre de la persona que recibe el cargo.")
             else:
-                st.info("Esta pantalla lee los datos en tiempo real de Google Sheets. Para registrar nuevos o editarlos, ingresa directamente a tu archivo en la nube.")
+                st.info("Esta pantalla lee los datos en tiempo real. Para editar o añadir registros, modifícalos directamente desde tu hoja de Google Sheets.")
 
 # ==========================================
 # 2. MÓDULO DE CONSULTA
