@@ -43,8 +43,8 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
     st.rerun()
 
 # --- ENCABEZADO SOLICITADO ---
-st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Control de Cargos de Pecosas</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Hospital Regional Docente Las Mercedes Chiclayo</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Control de Cargos de Pecosas</h3>", unsafe_allow_html=True)
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
