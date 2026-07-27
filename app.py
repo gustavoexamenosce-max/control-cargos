@@ -40,14 +40,21 @@ st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Contr
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
-# --- CONEXIÓN DE EXPORTACIÓN CSV DIRECTA (PRIMERA PESTAÑA GID=0) ---
-URL_EXCEL = "https://google.com"
+# --- CONEXIÓN DE EXPORTACIÓN INMUNE A BLOQUEOS DE RED ---
+ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
+# Cambiamos la petición a formato de descarga universal para saltar filtros web de Google
+URL_LIMPIA = f"https://google.com{ID_HOJA}&output=csv"
 
 try:
-    # Lector de texto nativo rápido, libre de códigos extraños de Google
-    df_actual = pd.read_csv(URL_EXCEL)
+    # Lector de datos directo por bloques de texto planos
+    df_actual = pd.read_csv(URL_LIMPIA)
+    
+    # Si por error jala código de página web en vez de datos de Chiclayo, lanzamos un aviso limpio
+    if df_actual.empty or "html" in str(df_actual.columns[0]).lower() or "<!doctype" in str(df_actual.columns[0]).lower():
+        st.warning("⚠️ Google está procesando la sincronización de la hoja. Si el mensaje persiste, verifica que tu archivo en Drive esté en modo 'Cualquier persona con el enlace'.")
+        df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 except Exception as e:
-    st.error(f"⚠️ Error de lectura. Detalles: {e}")
+    st.error("⚠️ No se pudo conectar a la base de datos de Google Sheets.")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
@@ -86,7 +93,7 @@ if opcion == "📥 Registrar Cargo":
             if not recibido_por:
                 st.error("❌ Por seguridad, debes ingresar el nombre de la persona que recibe el cargo.")
             else:
-                st.info("Para guardar registros nuevos directamente en la nube, edita tu Google Sheets. Esta pantalla lee los datos en tiempo real.")
+                st.info("Esta pantalla lee los datos en tiempo real de Google Sheets. Para registrar nuevos o editarlos, ingresa directamente a tu archivo en la nube.")
 
 # ==========================================
 # 2. MÓDULO DE CONSULTA
