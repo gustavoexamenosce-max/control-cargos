@@ -43,7 +43,7 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
 # --- CONEXIÓN DIRECTA CON TU ID DE GOOGLE SHEETS ---
-URL_EXCEL = "https://google.com
+URL_EXCEL = "https://google.com"
 
 try:
     df_actual = pd.read_html(URL_EXCEL, header=0)[0]
