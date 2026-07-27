@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime, date
-# IMPORTACIÓN OFICIAL REQUERIDA PARA EVITAR EL ERROR DE ATRIBUTO
-from streamlit_gsheets import GSheetsConnection
 
 # --- Configuración visual para móviles ---
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="📋")
@@ -42,11 +40,14 @@ st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Chicl
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
-# --- CONEXIÓN OFICIAL SEGURA CON GOOGLE SHEETS ---
+# --- CONEXIÓN DE EXPORTACIÓN DIRECTA REPARADA ---
+ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fE777SSSwxz9KJ8VEQ"
+# Usamos el formato nativo de exportación de Google Drive para saltar filtros web
+URL_LIMPIA = f"https://google.com{ID_HOJA}/export?format=csv&gid=0"
+
 try:
-    # Usamos la conexión oficial llamando al módulo externo importado arriba
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    df_actual = conn.read(ttl=0)
+    # Lector directo en texto plano (Inmune a bloqueos 404)
+    df_actual = pd.read_csv(URL_LIMPIA)
 except Exception as e:
     st.error(f"⚠️ Error al conectar con Google Sheets. Detalles: {e}")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
