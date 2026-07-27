@@ -1,28 +1,31 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime, date
+
 # --- Configuración visual para móviles ---
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="📋")
+
 # --- ENCABEZADO SOLICITADO ---
-st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Hospital Las Mercedes Chiclayo</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Control de Cargos de Pecosas</h3>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Control de Cargos de Pecosas</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
-# --- CONEXIÓN DIRECTA A GOOGLE SHEETS EN LA NUBE ---
-# PEGA AQUÍ TU ENLACE COMPLETO DE GOOGLE SHEETS (El que copiaste en el paso 1)
-# Asegúrate de cambiar el final del enlace para que termine en '/export?format=csv' en lugar de '/edit...'
-ID_HOJA = "https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ/edit?gid=0#gid=0"
-# Esta URL obliga a Google a entregarle a tu celular el archivo listo como Excel limpio
-URL_EXCEL = f"https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ/export?format=xlsx"
-# Cargamos los datos sin filtros complejos de red
+
+# --- CONEXIÓN DIRECTA CON TU ID DE GOOGLE SHEETS ---
+ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
+URL_EXCEL = f"https://google.com{ID_HOJA}/export?format=xlsx"
+
 try:
     df_actual = pd.read_excel(URL_EXCEL)
 except Exception as e:
     st.error("⚠️ La hoja de Google Sheets sigue privada. Verifica el botón Compartir.")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
+
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
          7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+
 opcion = st.sidebar.selectbox("MENÚ PRINCIPAL", ["📥 Registrar Cargo", "🔍 Consultar Cargos", "✏️ Modificar / Actualizar"])
+
 # ==========================================
 # 1. MÓDULO DE INGRESO
 # ==========================================
@@ -54,24 +57,7 @@ if opcion == "📥 Registrar Cargo":
             if not recibido_por:
                 st.error("❌ Por seguridad, debes ingresar el nombre de la persona que recibe el cargo.")
             else:
-                nuevo_id = int(df_actual["ID"].max() + 1) if not df_actual.empty and pd.notna(df_actual["ID"].max()) else 1
-                nuevo_registro = pd.DataFrame([{
-                    "ID": nuevo_id,
-                    "Fecha_Ingreso": fecha.strftime("%Y-%m-%d"),
-                    "Empresa_Transporte": emp_transporte,
-                    "Guia_Transporte": guia_transporte,
-                    "Empresa_Proveedor": emp_proveedor,
-                    "Guia_Proveedor": guia_proveedor,
-                    "Pecosa": pecosa,
-                    "Cantidad": cantidad,
-                    "Importe": importe,
-                    "Mes": mes_calculado,
-                    "Recibido_Por": recibido_por,
-                    "Estado": estado
-                }])
-                
-                st.session_state.cargos_db = pd.concat([df_actual, nuevo_registro], ignore_index=True)
-                st.success(f"✔️ ¡Cargo ID {nuevo_id} guardado temporalmente! Descarga el reporte para salvar tus cambios.")
+                st.info("Para guardar registros nuevos directamente en la nube, edita tu Google Sheets. Esta pantalla lee los datos en tiempo real.")
 
 # ==========================================
 # 2. MÓDULO DE CONSULTA
@@ -93,27 +79,11 @@ elif opcion == "🔍 Consultar Cargos":
         st.dataframe(df_filtrado, use_container_width=True)
         
         csv = df_filtrado.to_csv(index=False).encode('utf-8')
-        st.download_button("📥 Descargar Reporte Completo Actualizado (CSV / Excel)", data=csv, file_name=f"cargos_chiclayo_{date.today()}.csv", mime='text/csv')
+        st.download_button("📥 Descargar Reporte Completo (CSV / Excel)", data=csv, file_name=f"cargos_chiclayo_{date.today()}.csv", mime='text/csv')
 
 # ==========================================
 # 3. MÓDULO DE MODIFICACIÓN
 # ==========================================
 elif opcion == "✏️ Modificar / Actualizar":
     st.header("✏️ Actualizar Estado de Entrega")
-    if df_actual.empty:
-        st.warning("No hay registros.")
-    else:
-        id_editar = st.selectbox("Seleccione el ID a actualizar:", df_actual["ID"].tolist())
-        datos_actuales = df_actual[df_actual["ID"] == id_editar].iloc[0]
-        
-        with st.form("form_edicion"):
-            edit_recibido = st.text_input("Recibido por:", value=datos_actuales["Recibido_Por"])
-            lista_estados = ["Cargo Entregado", "Pendiente de Entrega"]
-            idx_estado = lista_estados.index(datos_actuales["Estado"]) if datos_actuales["Estado"] in lista_estados else 0
-            edit_estado = st.selectbox("Estado del Cargo:", lista_estados, index=idx_estado)
-            
-            actualizar = st.form_submit_button("⚡ Actualizar Estado")
-            if actualizar:
-                st.session_state.cargos_db.loc[st.session_state.cargos_db["ID"] == id_editar, ["Recibido_Por", "Estado"]] = [edit_recibido, edit_estado]
-                st.success("¡Registro actualizado!")
-                st.rerun()
+    st.info("Para modificar registros, edita directamente las celdas en tu archivo de Google Sheets. El celular actualizará los cambios de inmediato.")
