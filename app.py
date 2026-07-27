@@ -1,10 +1,8 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime, date
-
 # --- Configuración visual para móviles ---
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="📋")
-
 # --- ENCABEZADO SOLICITADO ---
 st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Hospital Las Mercedes Chiclayo</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Control de Cargos de Pecosas</h3>", unsafe_allow_html=True)
@@ -13,24 +11,18 @@ st.write("---")
 # --- CONEXIÓN DIRECTA A GOOGLE SHEETS EN LA NUBE ---
 # PEGA AQUÍ TU ENLACE COMPLETO DE GOOGLE SHEETS (El que copiaste en el paso 1)
 # Asegúrate de cambiar el final del enlace para que termine en '/export?format=csv' en lugar de '/edit...'
-URL_BASE = "https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ/edit?gid=0#gid=0"
-URL_CSV = f"https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ/edit?gid=0#gid=0/export?format=csv"
-
-@st.cache_data(ttl="0d")  # ttl=0 obliga a leer los datos reales de la nube cada vez
-@st.cache_data(ttl=0)
-def cargar_datos_reales(url):
-    return pd.read_csv(url)
-
+ID_HOJA = "https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ/edit?gid=0#gid=0"
+# Esta URL obliga a Google a entregarle a tu celular el archivo listo como Excel limpio
+URL_EXCEL = f"https://docs.google.com/spreadsheets/d/1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ/export?format=xlsx"
+# Cargamos los datos sin filtros complejos de red
 try:
-    df_actual = cargar_datos_reales(URL_CSV)
+    df_actual = pd.read_excel(URL_EXCEL)
 except Exception as e:
-    st.error("Error al conectar con la hoja de cálculo pública.")
+    st.error("⚠️ La hoja de Google Sheets sigue privada. Verifica el botón Compartir.")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
          7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
-
 opcion = st.sidebar.selectbox("MENÚ PRINCIPAL", ["📥 Registrar Cargo", "🔍 Consultar Cargos", "✏️ Modificar / Actualizar"])
-
 # ==========================================
 # 1. MÓDULO DE INGRESO
 # ==========================================
