@@ -54,9 +54,9 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
 
 # --- ENCABEZADO INSTITUCIONAL ---
 st.image("https://regionlambayeque.gob.pe", width=90)
-st.title("📋 Hospital Regional Docente "Las Mercedes" Chiclayo")
+st.title("📋 Hospital Regional Docente Las Mercedes Chiclayo")
 st.subheader("Control de Cargos de Pecosas")
-st.caption("Gustavo Taboada B. - Almacen de Farmacia - Entrega de Cargos")
+st.caption("Gustavo Taboada B - Almacen de Farmacia - Entrega de Cargos")
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
