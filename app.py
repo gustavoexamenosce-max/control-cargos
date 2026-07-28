@@ -5,6 +5,24 @@ from datetime import datetime, date
 # --- Configuración visual nativa para móviles ---
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="https://regionlambayeque.gob.pe")
 
+# --- 🎯 ELIMINACIÓN TOTAL Y ABSOLUTA DEL ICONO DE LA HOJA Y EL CERO ---
+st.markdown("""
+    <style>
+        /* Bloqueo total de la barra de herramientas superior de Streamlit */
+        header, [data-testid="stHeader"], div[data-testid="stDecoration"], .stCache, .stActionButton {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0px !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+        /* Eliminar márgenes superiores que deja la barra al borrarse */
+        .main .block-container {
+            padding-top: 1rem !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 # --- CONTROL DE ACCESO (SISTEMA DE CONTRASEÑA) ---
 if "autenticado" not in st.session_state:
     st.session_state.autenticado = False
@@ -36,9 +54,9 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
 
 # --- ENCABEZADO INSTITUCIONAL ---
 st.image("https://regionlambayeque.gob.pe", width=90)
-st.title("📋 Control de Cargos de Pecosas")
-st.subheader("Chiclayo")
-st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
+st.title("📋 Hospital Regional Docente "Las Mercedes" Chiclayo")
+st.subheader("Control de Cargos de Pecosas")
+st.caption("Gustavo Taboada B. - Almacen de Farmacia - Entrega de Cargos")
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
@@ -97,7 +115,6 @@ elif opcion == "🔍 Consultar Cargos":
     if df_actual.empty or "html" in str(df_actual.columns).lower():
         st.warning("No hay cargos registrados o la hoja no es pública.")
     else:
-        # FORZAMOS A QUE EL BUSCADOR USE UN NOMBRE LARGO EXPLICATIVO
         filtro_busqueda = st.text_input("Escribe aquí el Proveedor o Guía para buscar:")
         df_filtrado = df_actual.copy()
         if filtro_busqueda:
