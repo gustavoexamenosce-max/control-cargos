@@ -5,16 +5,44 @@ from datetime import datetime, date
 # --- Configuración visual para móviles ---
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="https://regionlambayeque.gob.pe")
 
-# --- 🎨 DISEÑO DE COLORES PERSONALIZADO (HOSPITAL LAS MERCEDES) ---
+# --- 🎨 DISEÑO DE COLORES PERSONALIZADO FIJO (FONDO BLANCO PERMANENTE) ---
 st.markdown("""
     <style>
+        /* OBLIGAR A QUE EL FONDO DE LA APP SEA SIEMPRE BLANCO INSTITUCIONAL */
+        .stApp {
+            background-color: #ffffff !important;
+        }
+        
+        /* Asegurar que todos los textos normales sean negros o gris oscuro legibles */
+        p, span, label, .stMarkdown, .caption {
+            color: #1c2833 !important;
+        }
+
         /* Color de fondo de la barra lateral (Menú) - Azul Institucional */
         [data-testid="stSidebar"] {
-            background-color: #0b3c5d;
+            background-color: #0b3c5d !important;
         }
         /* Cambiar texto del menú lateral a blanco para que resalte */
         [data-testid="stSidebar"] * {
             color: #ffffff !important;
+        }
+        
+        /* OCULTAR EL INDICADOR DE MEMORIA (ICONO DE HOJA CON EL CERO) */
+        [data-testid="stHeader"] {
+            display: none !important;
+        }
+        div[data-testid="stDecoration"] {
+            display: none !important;
+        }
+        .stCache {
+            display: none !important;
+        }
+        
+        /* CORREGIR TEXTO DEL BUSCADOR INTERNO DE LA LUPA */
+        .stTextInput input {
+            color: #0b3c5d !important; 
+            background-color: #f4f6f7 !important; /* Fondo gris claro para el cuadro */
+            font-weight: 500 !important;
         }
         
         /* Estilizar los botones del formulario y descargas */
@@ -24,13 +52,13 @@ st.markdown("""
             border-radius: 20px !important;
             border: none !important;
             font-weight: bold !important;
-            padding: 0.5rem 2remHeader !important;
+            padding: 0.5rem 2rem !important;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15) !important;
             transition: all 0.3s ease !important;
             width: 100% !important;
         }
         
-        /* Efecto brillante cuando pasas el mouse o presionas con el dedo */
+        /* Efecto brillante al presionar o pasar el mouse */
         div.stButton > button:hover, div.stFormSubmitButton > button:hover, .stDownloadButton > button:hover {
             background-color: #0d5c75 !important;
             box-shadow: 0px 6px 15px rgba(13, 92, 117, 0.4) !important;
@@ -41,6 +69,8 @@ st.markdown("""
         .stTextInput>div>div>input, .stNumberInput>div>div>input, .stSelectbox>div>div>div {
             border: 2px solid #d9b310 !important; /* Detalle dorado sutil de borde */
             border-radius: 10px !important;
+            background-color: #ffffff !important;
+            color: #1c2833 !important;
         }
         
         /* Tarjetas o contenedores de mensajes de éxito */
@@ -70,7 +100,7 @@ def verificar_password():
 
 # Si NO está autenticado, mostramos la pantalla de bloqueo
 if not st.session_state.autenticado:
-    st.markdown("<h2 style='text-align: center;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #0b3c5d;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: gray;'>Introduce la clave de acceso para el Control de Cargos</p>", unsafe_allow_html=True)
     
     st.text_input(
@@ -87,7 +117,6 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
     st.rerun()
 
 # --- ENCABEZADO INSTITUCIONAL ---
-# Logotipo del Hospital arriba del título
 st.image("https://regionlambayeque.gob.pe", width=90)
 st.markdown("<h1 style='margin-top: 10px; margin-bottom: 0px;'>📋 Control de Cargos de Pecosas</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='color: #328cc1; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
@@ -95,6 +124,7 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospit
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
+# RECUERDA: Esta es la línea 121 debido a las reglas de fondo blanco agregadas arriba.
 URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzt4dQwOVkz-ncXFWwGyWY6tt6xqAhgubPsBNSM7EE8asRvtTQ8KFYBPnFkd9kFg_dhmlyciWeHcwI/pub?output=csv"
 
 try:
@@ -104,7 +134,7 @@ except Exception as e:
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
-         7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+         7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
 opcion = st.sidebar.selectbox("MENÚ PRINCIPAL", ["📥 Registrar Cargo", "🔍 Consultar Cargos", "✏️ Modificar / Actualizar"])
 
