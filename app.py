@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, date
 
-# --- Configuración visual para móviles ---
+# --- Configuración visual nativa para móviles ---
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="https://regionlambayeque.gob.pe")
 
 # --- CONTROL DE ACCESO (SISTEMA DE CONTRASEÑA) ---
@@ -36,8 +36,8 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
 
 # --- ENCABEZADO INSTITUCIONAL ---
 st.image("https://regionlambayeque.gob.pe", width=90)
-st.markdown("<h1 style='margin-top: 10px; margin-bottom: 0px;'>📋 Control de Cargos de Pecosas</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='color: #328cc1; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
+st.title("📋 Control de Cargos de Pecosas")
+st.subheader("Chiclayo")
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
 st.write("---")
 
@@ -51,7 +51,7 @@ except Exception as e:
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
-         7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+         7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
 opcion = st.sidebar.selectbox("MENÚ PRINCIPAL", ["📥 Registrar Cargo", "🔍 Consultar Cargos", "✏️ Modificar / Actualizar"])
 
@@ -97,7 +97,8 @@ elif opcion == "🔍 Consultar Cargos":
     if df_actual.empty or "html" in str(df_actual.columns).lower():
         st.warning("No hay cargos registrados o la hoja no es pública.")
     else:
-        filtro_busqueda = st.text_input("Buscar por Proveedor, Transporte o Nº de Guía:")
+        # FORZAMOS A QUE EL BUSCADOR USE UN NOMBRE LARGO EXPLICATIVO
+        filtro_busqueda = st.text_input("Escribe aquí el Proveedor o Guía para buscar:")
         df_filtrado = df_actual.copy()
         if filtro_busqueda:
             df_filtrado = df_filtrado[
