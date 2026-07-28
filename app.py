@@ -5,44 +5,41 @@ from datetime import datetime, date
 # --- Configuración visual para móviles ---
 st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="https://regionlambayeque.gob.pe")
 
-# --- 🎨 DISEÑO DE COLORES PERSONALIZADO FIJO (FONDO BLANCO PERMANENTE) ---
+# --- 🎨 DISEÑO DE COLORES DE MÁXIMA PRIORIDAD (ELIMINA CACHÉ VISUAL) ---
 st.markdown("""
     <style>
-        /* OBLIGAR A QUE EL FONDO DE LA APP SEA SIEMPRE BLANCO INSTITUCIONAL */
-        .stApp {
+        /* OBLIGAR FONDO BLANCO EN CUALQUIER MODO (OSCURO O CLARO) */
+        .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
             background-color: #ffffff !important;
         }
         
-        /* Asegurar que todos los textos normales sean negros o gris oscuro legibles */
-        p, span, label, .stMarkdown, .caption {
-            color: #1c2833 !important;
+        /* BORRAR POR COMPLETO LA BARRA SUPERIOR (ICONO DE HOJA, CERO Y BOTONES) */
+        header, [data-testid="stHeader"], .stActionButton, div[data-testid="stDecoration"], .stCache {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0px !important;
+        }
+        
+        /* HACER VISIBLE EL TEXTO DE LA LUPA (FONDO GRIS CLARO, LETRAS NEGRAS) */
+        div[data-testid="stTextInput"] input {
+            color: #000000 !important;
+            background-color: #f0f2f6 !important;
+            -webkit-text-fill-color: #000000 !important;
+            opacity: 1 !important;
+        }
+        
+        /* Forzar que las etiquetas flotantes de la lupa se vean oscuras */
+        div[data-testid="stTextInput"] label p {
+            color: #0b3c5d !important;
+            font-weight: bold !important;
         }
 
-        /* Color de fondo de la barra lateral (Menú) - Azul Institucional */
+        /* Color de fondo de la barra lateral (Menú) */
         [data-testid="stSidebar"] {
             background-color: #0b3c5d !important;
         }
-        /* Cambiar texto del menú lateral a blanco para que resalte */
         [data-testid="stSidebar"] * {
             color: #ffffff !important;
-        }
-        
-        /* OCULTAR EL INDICADOR DE MEMORIA (ICONO DE HOJA CON EL CERO) */
-        [data-testid="stHeader"] {
-            display: none !important;
-        }
-        div[data-testid="stDecoration"] {
-            display: none !important;
-        }
-        .stCache {
-            display: none !important;
-        }
-        
-        /* CORREGIR TEXTO DEL BUSCADOR INTERNO DE LA LUPA */
-        .stTextInput input {
-            color: #0b3c5d !important; 
-            background-color: #f4f6f7 !important; /* Fondo gris claro para el cuadro */
-            font-weight: 500 !important;
         }
         
         /* Estilizar los botones del formulario y descargas */
@@ -58,31 +55,25 @@ st.markdown("""
             width: 100% !important;
         }
         
-        /* Efecto brillante al presionar o pasar el mouse */
         div.stButton > button:hover, div.stFormSubmitButton > button:hover, .stDownloadButton > button:hover {
             background-color: #0d5c75 !important;
-            box-shadow: 0px 6px 15px rgba(13, 92, 117, 0.4) !important;
             transform: translateY(-2px);
         }
         
-        /* Estilizar los cuadros de entrada de datos (Inputs) */
+        /* Estilizar los cuadros de entrada de datos generales */
         .stTextInput>div>div>input, .stNumberInput>div>div>input, .stSelectbox>div>div>div {
-            border: 2px solid #d9b310 !important; /* Detalle dorado sutil de borde */
+            border: 2px solid #d9b310 !important;
             border-radius: 10px !important;
             background-color: #ffffff !important;
-            color: #1c2833 !important;
+            color: #000000 !important;
         }
         
-        /* Tarjetas o contenedores de mensajes de éxito */
-        div.stAlert {
-            border-radius: 12px !important;
-            box-shadow: 0px 4px 6px rgba(0,0,0,0.05) !important;
-        }
-        
-        /* Cambiar color de los títulos principales del cuerpo */
         h1, h2, h3 {
             color: #0b3c5d !important;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        p, span, label, caption {
+            color: #000000 !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -124,7 +115,7 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospit
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
-# RECUERDA: Esta es la línea 121 debido a las reglas de fondo blanco agregadas arriba.
+# ⚠️ RECUERDA: Esta es la línea 127. Coloca aquí tu propio enlace de Google Sheets que termina en /pub?output=csv
 URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzt4dQwOVkz-ncXFWwGyWY6tt6xqAhgubPsBNSM7EE8asRvtTQ8KFYBPnFkd9kFg_dhmlyciWeHcwI/pub?output=csv"
 
 try:
@@ -134,7 +125,7 @@ except Exception as e:
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
-         7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+         7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
 opcion = st.sidebar.selectbox("MENÚ PRINCIPAL", ["📥 Registrar Cargo", "🔍 Consultar Cargos", "✏️ Modificar / Actualizar"])
 
