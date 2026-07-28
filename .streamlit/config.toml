@@ -1,0 +1,11 @@
+toml[theme]
+primaryColor = "#328cc1"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f4f6f7"
+textColor = "#1c2833"
+font = "sans serif"
+base = "light"
+
+[client]
+showErrorDetails = false
+toolbarMode = "minimal"
