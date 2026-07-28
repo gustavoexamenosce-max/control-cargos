@@ -52,7 +52,7 @@ except Exception as e:
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
-         7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+         7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
 opcion = st.sidebar.selectbox("MENÚ PRINCIPAL", ["📥 Registrar Cargo", "🔍 Consultar Cargos", "✏️ Modificar / Actualizar"])
 
@@ -87,7 +87,7 @@ if opcion == "📥 Registrar Cargo":
             if not recibido_por:
                 st.error("❌ Por seguridad, debes ingresar el nombre de la persona que recibe el cargo.")
             else:
-                st.info("Para guardar registros nuevos en la nube, edita tu Google Sheets. Esta pantalla lee los datos en tiempo real.")
+                st.info("Para guardar registros nuevos en la nube, edita tu Base de Datos. Esta pantalla lee los datos en tiempo real.")
 
 # ==========================================
 # 2. MÓDULO DE CONSULTA
@@ -116,4 +116,4 @@ elif opcion == "🔍 Consultar Cargos":
 # ==========================================
 elif opcion == "✏️ Modificar / Actualizar":
     st.header("✏️ Actualizar Estado de Entrega")
-    st.info("Para modificar registros, edita directamente las celdas en tu archivo de Google Sheets. El celular actualizará los cambios de inmediato.")
+    st.info("Para modificar registros, edita directamente las celdas en tu archivo de Base de Datos. El celular actualizará los cambios de inmediato.")
