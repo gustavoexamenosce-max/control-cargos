@@ -42,7 +42,7 @@ st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
 ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
-URL_CSV = f"https://google.com{ID_HOJA}/export?format=csv"
+URL_CSV = "https://google.com"
 
 # Forzar la descarga limpia de datos omitiendo errores del sistema de red anterior
 try:
