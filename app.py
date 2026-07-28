@@ -40,13 +40,21 @@ st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Chicl
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
-URL_EXCEL = "https://google.com"
+# --- CONEXIÓN DE EXPORTACIÓN INMUNE A BLOQUEOS DE GOOGLE ---
+ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fE777SSSwxz9KJ8VEQ"
+# El formato 'ccc?output=csv' obliga a Google a entregar texto puro y destruye el código JavaScript oculto
+URL_INMUNE = f"https://google.com{ID_HOJA}&output=csv"
 
 try:
-    # Lector directo sin procesos adicionales de red
-    df_actual = pd.read_csv(URL_EXCEL)
+    # Lector directo por bloques de texto planos
+    df_actual = pd.read_csv(URL_INMUNE)
+    
+    # Control de seguridad: Si por alguna razón la URL sigue jalando código web de Google, lo limpiamos de inmediato
+    if df_actual.empty or "html" in str(df_actual.columns).lower() or "<!doctype" in str(df_actual.columns).lower():
+        st.warning("⚠️ Google está procesando la sincronización de la hoja. Si el mensaje persiste, verifica que tu archivo en Drive esté en modo 'Cualquier persona con el enlace'.")
+        df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 except Exception as e:
-    st.error(f"⚠️ Error de lectura. Detalles: {e}")
+    st.error(f"⚠️ Error al conectar con Google Sheets. Detalles: {e}")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
