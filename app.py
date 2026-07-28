@@ -40,21 +40,15 @@ st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Chicl
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
-# --- CONEXIÓN DE EXPORTACIÓN INMUNE A BLOQUEOS DE GOOGLE ---
+# --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
 ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fE777SSSwxz9KJ8VEQ"
-# El formato 'ccc?output=csv' obliga a Google a entregar texto puro y destruye el código JavaScript oculto
-URL_INMUNE = f"https://google.com{ID_HOJA}&output=csv"
+URL_CSV = f"https://google.com{ID_HOJA}/export?format=csv"
 
+# Forzar la descarga limpia de datos omitiendo errores del sistema de red anterior
 try:
-    # Lector directo por bloques de texto planos
-    df_actual = pd.read_csv(URL_INMUNE)
-    
-    # Control de seguridad: Si por alguna razón la URL sigue jalando código web de Google, lo limpiamos de inmediato
-    if df_actual.empty or "html" in str(df_actual.columns).lower() or "<!doctype" in str(df_actual.columns).lower():
-        st.warning("⚠️ Google está procesando la sincronización de la hoja. Si el mensaje persiste, verifica que tu archivo en Drive esté en modo 'Cualquier persona con el enlace'.")
-        df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
+    df_actual = pd.read_csv(URL_CSV)
 except Exception as e:
-    st.error(f"⚠️ Error al conectar con Google Sheets. Detalles: {e}")
+    st.error("⚠️ Error de conexión con los servidores de Google Sheets.")
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
@@ -93,7 +87,7 @@ if opcion == "📥 Registrar Cargo":
             if not recibido_por:
                 st.error("❌ Por seguridad, debes ingresar el nombre de la persona que recibe el cargo.")
             else:
-                st.info("Esta pantalla lee los datos en tiempo real. Para editar o añadir registros, modifícalos directamente desde tu hoja de Google Sheets.")
+                st.info("Para guardar registros nuevos en la nube, edita tu Google Sheets. Esta pantalla lee los datos en tiempo real.")
 
 # ==========================================
 # 2. MÓDULO DE CONSULTA
@@ -101,8 +95,8 @@ if opcion == "📥 Registrar Cargo":
 elif opcion == "🔍 Consultar Cargos":
     st.header("🔍 Archivo de Guías y Cargos Entregados")
     
-    if df_actual.empty:
-        st.warning("No hay cargos registrados.")
+    if df_actual.empty or "html" in str(df_actual.columns).lower():
+        st.warning("No hay cargos registrados o la hoja no es pública.")
     else:
         filtro_busqueda = st.text_input("Buscar por Proveedor, Transporte o Nº de Guía:")
         df_filtrado = df_actual.copy()
