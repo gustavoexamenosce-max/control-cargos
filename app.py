@@ -3,7 +3,59 @@ import pandas as pd
 from datetime import datetime, date
 
 # --- Configuración visual para móviles ---
-st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="📋")
+st.set_page_config(page_title="Control de Cargos", layout="centered", page_icon="https://regionlambayeque.gob.pe")
+
+# --- 🎨 DISEÑO DE COLORES PERSONALIZADO (HOSPITAL LAS MERCEDES) ---
+st.markdown("""
+    <style>
+        /* Color de fondo de la barra lateral (Menú) - Azul Institucional */
+        [data-testid="stSidebar"] {
+            background-color: #0b3c5d;
+        }
+        /* Cambiar texto del menú lateral a blanco para que resalte */
+        [data-testid="stSidebar"] * {
+            color: #ffffff !important;
+        }
+        
+        /* Estilizar los botones del formulario y descargas */
+        div.stButton > button, div.stFormSubmitButton > button, .stDownloadButton > button {
+            background-color: #328cc1 !important;
+            color: white !important;
+            border-radius: 20px !important;
+            border: none !important;
+            font-weight: bold !important;
+            padding: 0.5rem 2remHeader !important;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15) !important;
+            transition: all 0.3s ease !important;
+            width: 100% !important;
+        }
+        
+        /* Efecto brillante cuando pasas el mouse o presionas con el dedo */
+        div.stButton > button:hover, div.stFormSubmitButton > button:hover, .stDownloadButton > button:hover {
+            background-color: #0d5c75 !important;
+            box-shadow: 0px 6px 15px rgba(13, 92, 117, 0.4) !important;
+            transform: translateY(-2px);
+        }
+        
+        /* Estilizar los cuadros de entrada de datos (Inputs) */
+        .stTextInput>div>div>input, .stNumberInput>div>div>input, .stSelectbox>div>div>div {
+            border: 2px solid #d9b310 !important; /* Detalle dorado sutil de borde */
+            border-radius: 10px !important;
+        }
+        
+        /* Tarjetas o contenedores de mensajes de éxito */
+        div.stAlert {
+            border-radius: 12px !important;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.05) !important;
+        }
+        
+        /* Cambiar color de los títulos principales del cuerpo */
+        h1, h2, h3 {
+            color: #0b3c5d !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # --- CONTROL DE ACCESO (SISTEMA DE CONTRASEÑA) ---
 if "autenticado" not in st.session_state:
@@ -34,17 +86,17 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
     st.session_state.autenticado = False
     st.rerun()
 
-# --- ENCABEZADO SOLICITADO ---
-st.markdown("<h1 style='text-align: center; margin-bottom: 0px;'>📋 Hospital Regional Docente "Las Mercedes" Chiclayo</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: gray; margin-top: 0px;'>Control de Cargos de Pecosas</h3>", unsafe_allow_html=True)
-st.caption("Gustavo Taboada B. - Almacén de Farmacia - Entrega de Cargos")
+# --- ENCABEZADO INSTITUCIONAL ---
+# Logotipo del Hospital arriba del título
+st.image("https://regionlambayeque.gob.pe", width=90)
+st.markdown("<h1 style='margin-top: 10px; margin-bottom: 0px;'>📋 Control de Cargos de Pecosas</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='color: #328cc1; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
+st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
-ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
-URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzt4dQwOVkz-ncXFWwGyWY6tt6xqAhgubPsBNSM7EE8asRvtTQ8KFYBPnFkd9kFg_dhmlyciWeHcwI/pub?output=csv"
+URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzt4dQwOVkz-ncXFWwGyWY6tt6xqAhgubPsBNSM7EE8asRvtTQ8KFYBPnFkd9kFg_dhmlyciWeHcwI/pubhtml"
 
-# Forzar la descarga limpia de datos omitiendo errores del sistema de red anterior
 try:
     df_actual = pd.read_csv(URL_CSV)
 except Exception as e:
@@ -87,7 +139,7 @@ if opcion == "📥 Registrar Cargo":
             if not recibido_por:
                 st.error("❌ Por seguridad, debes ingresar el nombre de la persona que recibe el cargo.")
             else:
-                st.info("Para guardar registros nuevos en la nube, edita tu Base de Datos. Esta pantalla lee los datos en tiempo real.")
+                st.info("Para guardar registros nuevos en la nube, edita tu Google Sheets. Esta pantalla lee los datos en tiempo real.")
 
 # ==========================================
 # 2. MÓDULO DE CONSULTA
@@ -116,4 +168,4 @@ elif opcion == "🔍 Consultar Cargos":
 # ==========================================
 elif opcion == "✏️ Modificar / Actualizar":
     st.header("✏️ Actualizar Estado de Entrega")
-    st.info("Para modificar registros, edita directamente las celdas en tu archivo de Base de Datos. El celular actualizará los cambios de inmediato.")
+    st.info("Para modificar registros, edita directamente las celdas en tu archivo de Google Sheets. El celular actualizará los cambios de inmediato.")
