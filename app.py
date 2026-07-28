@@ -41,7 +41,7 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística")
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
-ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fE777SSSwxz9KJ8VEQ"
+ID_HOJA = "1heCibc-23YHJeVJTPfdSLe9v4Q2r7fES7wxz9KJ8VEQ"
 URL_CSV = f"https://google.com{ID_HOJA}/export?format=csv"
 
 # Forzar la descarga limpia de datos omitiendo errores del sistema de red anterior
