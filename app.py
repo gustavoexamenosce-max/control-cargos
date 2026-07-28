@@ -95,7 +95,7 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospit
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
-URL_CSV = "https://google.com"
+URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzt4dQwOVkz-ncXFWwGyWY6tt6xqAhgubPsBNSM7EE8asRvtTQ8KFYBPnFkd9kFg_dhmlyciWeHcwI/pub?output=csv"
 
 try:
     df_actual = pd.read_csv(URL_CSV)
