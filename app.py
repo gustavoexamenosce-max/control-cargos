@@ -12,20 +12,15 @@ st.set_page_config(
 # --- 🎨 TUNEO DEFINITIVO Y LIMPIO: MÁXIMA LEGIBILIDAD EN MÓVILES ---
 st.markdown("""
     <style>
-        /* OBLIGAR FONDO CELESTE PASTEL BAJITO EN TODA LA APLICACIÓN */
         .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
             background-color: #e3f2fd !important;
         }
-        
-        /* BORRAR POR COMPLETO LA BARRA SUPERIOR GENERAL (ICONO DE HOJA Y EL CERO) */
         header, [data-testid="stHeader"], div[data-testid="stDecoration"], .stCache {
             display: none !important;
             visibility: hidden !important;
             height: 0px !important;
             opacity: 0 !important;
         }
-        
-        /* 🚫 ELIMINAR POR COMPLETO LA BARRA FLOTANTE DEFECTUOSA DE LA TABLA (MISTERIOSO RECUADRO) */
         [data-testid="stElementToolbar"], div[data-testid="stElementToolbar"] {
             display: none !important;
             visibility: hidden !important;
@@ -33,43 +28,31 @@ st.markdown("""
             width: 0px !important;
             opacity: 0 !important;
         }
-        
-        /* REPARAR CASILLA DE FECHA (FONDO BLANCO Y NÚMEROS NEGROS CLAROS) */
         div[data-testid="stDateInput"] button, div[data-testid="stDateInput"] input, div[data-baseweb="calendar"] * {
             background-color: #ffffff !important;
             color: #000000 !important;
             -webkit-text-fill-color: #000000 !important;
         }
-        
-        /* FORZAR TEXTOS Y ETIQUETAS EN AZUL MARINO OSCURO PARA MÁXIMO CONTRASTE */
         html, body, .stMarkdown, p, label, span, caption, .stCaption {
             color: #0d233a !important;
             -webkit-text-fill-color: #0d233a !important;
             font-weight: 500 !important;
         }
-        
-        /* TÍTULOS EN AZUL INSTITUCIONAL FUERTE */
         h1, h2, h3, h4, h5, h6 {
             color: #0b3c5d !important;
             -webkit-text-fill-color: #0b3c5d !important;
             font-weight: bold !important;
         }
-
-        /* PESTAÑAS DEL MENÚ SUPERIOR (LETRAS BIEN OSCURAS Y LEGIBLES) */
         button[data-baseweb="tab"] p {
             color: #0d233a !important;
             -webkit-text-fill-color: #0d233a !important;
             font-size: 16px !important;
             font-weight: bold !important;
         }
-        
-        /* Color de la pestaña seleccionada */
         button[data-baseweb="tab"][aria-selected="true"] p {
             color: #0077b6 !important;
             -webkit-text-fill-color: #0077b6 !important;
         }
-
-        /* CAJAS DE TEXTO (INPUTS) CON FONDO BLANCO Y LETRAS NEGRAS */
         .stTextInput input, .stNumberInput input, .stSelectbox div {
             color: #000000 !important;
             background-color: #ffffff !important;
@@ -77,8 +60,6 @@ st.markdown("""
             border: 2px solid #328cc1 !important;
             border-radius: 8px !important;
         }
-        
-        /* BOTONES EN AZUL CLÍNICO SEGURO */
         div.stButton > button, div.stFormSubmitButton > button, .stDownloadButton > button {
             background-color: #328cc1 !important;
             color: white !important;
@@ -90,21 +71,30 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- CONTROL DE ACCESO (SISTEMA DE CONTRASEÑA) ---
+# --- CONTROL DE ACCESO DOS NIVELES (ADMINISTRADOR / CONSULTA) ---
 if "autenticado" not in st.session_state:
     st.session_state.autenticado = False
+if "rol" not in st.session_state:
+    st.session_state.rol = None  # Puede ser 'admin' o 'consulta'
 
 def verificar_password():
-    if st.session_state["password_ingresada"] == st.secrets["password_sistema"]:
+    password_ingresada = st.session_state["password_ingresada"]
+    
+    if password_ingresada == st.secrets["password_sistema"]:
         st.session_state.autenticado = True
-        st.toast("🔓 Acceso concedido.")
+        st.session_state.rol = "admin"
+        st.toast("🔓 Acceso Administrador concedido.")
+    elif password_ingresada == st.secrets["password_consulta"]:
+        st.session_state.autenticado = True
+        st.session_state.rol = "consulta"
+        st.toast("🔍 Acceso de Consulta concedido.")
     else:
         st.error("❌ Contraseña incorrecta. Inténtalo de nuevo.")
 
 # Si NO está autenticado, mostramos la pantalla de bloqueo
 if not st.session_state.autenticado:
     st.markdown("<h2 style='text-align: center;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center;'>Introduce la clave de acceso para el Control de Cargos</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Introduce tu clave de acceso autorizada</p>", unsafe_allow_html=True)
     
     st.text_input(
         "Contraseña del Sistema:", 
@@ -114,15 +104,15 @@ if not st.session_state.autenticado:
     )
     st.stop()
 
-# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO CORREGIDO ---
+# --- ENCABEZADO INSTITUCIONAL ---
 col1, col2 = st.columns(2)
 with col1:
     st.markdown("<h1 style='font-size: 55px; margin: 0px;'>🚑</h1>", unsafe_allow_html=True)
 with col2:
-    st.markdown("<h2 style='margin-top: 0px; margin-bottom: 0px;'>Hospital Regional Docente Las Mercedes Chiclayo</h2>", unsafe_allow_html=True)
-    st.markdown("<h4 style='margin-top: 0px; margin-bottom: 0px;'>Control de Cargos de Pecosas</h4>", unsafe_allow_html=True)
+    st.markdown("<h2 style='margin-top: 0px; margin-bottom: 0px;'>Control de Cargos de Pecosas</h2>", unsafe_allow_html=True)
+    st.markdown("<h4 style='margin-top: 0px; margin-bottom: 0px;'>Chiclayo</h4>", unsafe_allow_html=True)
 
-st.caption("Gustavo Taboada B.")
+st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
@@ -135,50 +125,50 @@ except Exception as e:
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
-         7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+         7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
-# --- 🚀 MENÚ HORIZONTAL DE ICONOS SUPERIORES ---
-tab_registrar, tab_consultar, tab_modificar = st.tabs(["📥 Registrar", "🔍 Consultar", "✏️ Modificar"])
 
-# ==========================================
-# 1. MÓDULO DE INGRESO
-# ==========================================
-with tab_registrar:
-    st.header("📥 Registro de Entrega de Guía / Cargo")
-    
-    with st.form("form_registro", clear_on_submit=True):
-        fecha = st.date_input("Fecha de Recepción del Documento:", date.today())
-        mes_calculado = MESES[fecha.month]
-        
-        st.subheader("📄 Identificación de Guías")
-        emp_transporte = st.text_input("Empresa de Transporte:")
-        guia_transporte = st.text_input("Número de Guía de Transporte:")
-        emp_proveedor = st.text_input("Empresa Proveedor:")
-        guia_proveedor = st.text_input("Número de Guía de Proveedor:")
-        pecosa = st.text_input("Nº de Pecosa:")
-        
-        st.subheader("📦 Datos de la Carga")
-        cantidad = st.number_input("Cantidad según Guía:", min_value=0, step=1)
-        importe = st.number_input("Importe Total de la Guía (S/.):", min_value=0.0, step=0.10, format="%.2f")
-        
-        st.subheader("✍️ Control de Cargo y Estado")
-        recibido_por = st.text_input("Personal que recibe el Cargo (Nombre):")
-        estado = st.selectbox("Estado del Cargo:", ["Cargo Entregado", "Pendiente de Entrega"])
-        
-        guardar = st.form_submit_button("💾 Guardar y Validar Cargo")
-        
-        if guardar:
-            if not recibido_por:
-                st.error("❌ Por seguridad, debes ingresar el nombre de la persona que recibe el cargo.")
-            else:
-                st.info("Para guardar registros nuevos en la nube, edita tu Google Sheets. Esta pantalla lee los datos en tiempo real.")
+# --- 🚀 FILTRADO INTELIGENTE DE MENÚ SEGÚN EL ROL ---
+if st.session_state.rol == "admin":
+    # El administrador ve las 3 pestañas normales
+    tab_registrar, tab_consultar, tab_modificar = st.tabs(["📥 Registrar", "🔍 Consultar", "✏️ Modificar"])
+else:
+    # El personal de consulta SOLO ve la pestaña de consultar
+    tab_consultar = st.tabs(["🔍 Consultar"])[0]
+    tab_registrar = None
+    tab_modificar = None
+
 
 # ==========================================
-# 2. MÓDULO DE CONSULTA
+# 1. MÓDULO DE INGRESO (SOLO ADMIN)
+# ==========================================
+if tab_registrar:
+    with tab_registrar:
+        st.header("📥 Registro de Entrega de Guía / Cargo")
+        with st.form("form_registro", clear_on_submit=True):
+            fecha = st.date_input("Fecha de Recepción del Documento:", date.today())
+            emp_transporte = st.text_input("Empresa de Transporte:")
+            guia_transporte = st.text_input("Número de Guía de Transporte:")
+            emp_proveedor = st.text_input("Empresa Proveedor:")
+            guia_proveedor = st.text_input("Número de Guía de Proveedor:")
+            pecosa = st.text_input("Nº de Pecosa:")
+            cantidad = st.number_input("Cantidad según Guía:", min_value=0, step=1)
+            importe = st.number_input("Importe Total de la Guía (S/.):", min_value=0.0, step=0.10, format="%.2f")
+            recibido_por = st.text_input("Personal que recibe el Cargo (Nombre):")
+            estado = st.selectbox("Estado del Cargo:", ["Cargo Entregado", "Pendiente de Entrega"])
+            
+            guardar = st.form_submit_button("💾 Guardar y Validar Cargo")
+            if guardar:
+                if not recibido_por:
+                    st.error("❌ Por seguridad, debes ingresar el nombre de la persona que recibe el cargo.")
+                else:
+                    st.info("Para guardar registros nuevos en la nube, edita tu Google Sheets. Esta pantalla lee los datos en tiempo real.")
+
+# ==========================================
+# 2. MÓDULO DE CONSULTA (DISPONIBLE PARA TODOS)
 # ==========================================
 with tab_consultar:
     st.header("🔍 Archivo de Guías y Cargos Entregados")
-    
     if df_actual.empty or "html" in str(df_actual.columns).lower():
         st.warning("No hay cargos registrados o la hoja no es pública.")
     else:
@@ -196,14 +186,16 @@ with tab_consultar:
         st.download_button("📥 Descargar Reporte Completo (CSV / Excel)", data=csv, file_name=f"cargos_chiclayo_{date.today()}.csv", mime='text/csv')
 
 # ==========================================
-# 3. MÓDULO DE MODIFICACIÓN
+# 3. MÓDULO DE MODIFICACIÓN (SOLO ADMIN)
 # ==========================================
-with tab_modificar:
-    st.header("✏️ Actualizar Estado de Entrega")
-    st.info("Para modificar registros, edita directamente las celdas en tu archivo de Google Sheets. El celular actualizará los cambios de inmediato.")
+if tab_modificar:
+    with tab_modificar:
+        st.header("✏️ Actualizar Estado de Entrega")
+        st.info("Para modificar registros, edita directamente las celdas en tu archivo de Google Sheets. El celular actualizará los cambios de inmediato.")
 
-# --- 🔒 BOTÓN DE CERRAR SESIÓN UBICADO ABAJO AL FINAL DE LA HOJA ---
+# --- 🔒 BOTÓN DE CERRAR SESIÓN ---
 st.write("---")
 if st.button("🔒 Cerrar Sesión del Sistema"):
     st.session_state.autenticado = False
+    st.session_state.rol = None
     st.rerun()
