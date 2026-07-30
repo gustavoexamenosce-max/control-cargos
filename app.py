@@ -9,12 +9,34 @@ st.set_page_config(
     page_icon="https://wikimedia.org"
 )
 
-# --- 🎨 TUNEO FIJO: FONDO CELESTE PASTEL BAJITO Y LETRAS OSCURAS ---
+# --- 🎨 TUNEO DEFINTIVO: SOLUCIÓN DE ALERTAS VISUALES ---
 st.markdown("""
     <style>
         /* OBLIGAR FONDO CELESTE PASTEL BAJITO EN TODA LA APLICACIÓN */
         .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
             background-color: #e3f2fd !important;
+        }
+        
+        /* BORRAR POR COMPLETO LA BARRA SUPERIOR (ICONO DE HOJA Y EL CERO) */
+        header, [data-testid="stHeader"], div[data-testid="stDecoration"], .stCache {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0px !important;
+            opacity: 0 !important;
+        }
+        
+        /* OCULTAR TOTALMENTE LA BARRA LATERAL IZQUIERDA PARA LIMPIAR LA PANTALLA */
+        [data-testid="stSidebar"], section[data-testid="stSidebarViewContainer"] {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0px !important;
+        }
+        
+        /* REPARAR CASILLA DE FECHA (FONDO BLANCO Y NÚMEROS NEGROS CLAROS) */
+        div[data-testid="stDateInput"] button, div[data-testid="stDateInput"] input, div[data-baseweb="calendar"] * {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
         }
         
         /* FORZAR TEXTOS Y ETIQUETAS EN AZUL MARINO OSCURO PARA MÁXIMO CONTRASTE */
@@ -63,11 +85,6 @@ st.markdown("""
             border: none !important;
             font-weight: bold !important;
         }
-        
-        /* Ocultar barra de herramientas superior técnica */
-        [data-testid="stHeader"] .stCache, .stCache {
-            display: none !important;
-        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -95,16 +112,10 @@ if not st.session_state.autenticado:
     )
     st.stop()
 
-# --- Botón de cerrar sesión en la barra lateral ---
-if st.sidebar.button("🔒 Cerrar Sesión"):
-    st.session_state.autenticado = False
-    st.rerun()
-
-# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO CORREGIDO (LÍNEA 104 SOLUCIONADA) ---
-# Le agregamos el número 2 adentro para indicar 2 columnas de diseño
-col1, col2 = st.columns(2)
+# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO CORREGIDO ---
+col1, col2 = st.columns([1, 4])
 with col1:
-    st.image("https://flaticon.com", width=65)
+    st.image("https://flaticon.com", width=60)
 with col2:
     st.markdown("<h2 style='margin-top: 0px; margin-bottom: 0px;'>Control de Cargos de Pecosas</h2>", unsafe_allow_html=True)
     st.markdown("<h4 style='margin-top: 0px; margin-bottom: 0px;'>Chiclayo</h4>", unsafe_allow_html=True)
@@ -122,7 +133,7 @@ except Exception as e:
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
-         7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+         7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
 # --- 🚀 MENÚ HORIZONTAL DE ICONOS SUPERIORES ---
 tab_registrar, tab_consultar, tab_modificar = st.tabs(["📥 Registrar", "🔍 Consultar", "✏️ Modificar"])
@@ -188,3 +199,9 @@ with tab_consultar:
 with tab_modificar:
     st.header("✏️ Actualizar Estado de Entrega")
     st.info("Para modificar registros, edita directamente las celdas en tu archivo de Google Sheets. El celular actualizará los cambios de inmediato.")
+
+# --- 🔒 BOTÓN DE CERRAR SESIÓN UBICADO ABAJO AL FINAL DE LA HOJA ---
+st.write("---")
+if st.button("🔒 Cerrar Sesión del Sistema"):
+    st.session_state.autenticado = False
+    st.rerun()
