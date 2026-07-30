@@ -8,7 +8,18 @@ st.set_page_config(
     layout="centered", 
     page_icon="https://regionlambayeque.gob.pe"
 )
-
+# --- OCULTAR ÚNICAMENTE EL ICONO DE LA HOJA Y EL CERO ---
+st.markdown("""
+    <style>
+        /* Apaga la decoración del indicador de caché manteniendo el botón del menú vivo */
+        .stCache, div[class*="stCache"], iframe[title*="cache"], [data-testid="stHeader"] .stCache {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
 # --- CONTROL DE ACCESO (SISTEMA DE CONTRASEÑA) ---
 if "autenticado" not in st.session_state:
     st.session_state.autenticado = False
