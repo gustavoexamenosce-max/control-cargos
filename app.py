@@ -9,7 +9,7 @@ st.set_page_config(
     page_icon="🚑"
 )
 
-# --- 🎨 TUNEO DEFINTIVO: FONDO CELESTE PASTEL Y REPARACIÓN DE LETRAS ---
+# --- 🎨 TUNEO CORREGIDO: MÁXIMA VISIBILIDAD DE ICONOS DE TABLA ---
 st.markdown("""
     <style>
         /* OBLIGAR FONDO CELESTE PASTEL BAJITO EN TODA LA APLICACIÓN */
@@ -27,20 +27,17 @@ st.markdown("""
         
         /* REPARAR EL RECUADRITO MISTERIOSO FLOTANTE DE LA TABLA (EL OJO, LUPA, DESCARGA) */
         div[data-testid="stElementToolbar"], [data-testid="stElementToolbar"] {
-            background-color: #0b3c5d !important; /* Fondo azul fuerte para ganarle al blanco */
+            background-color: #0b3c5d !important; /* Fondo azul fuerte institucional */
             border-radius: 8px !important;
             padding: 4px !important;
-            opacity: 1 !important;
         }
         
-        /* Forzar que el ojo, la lupa, la descarga y la pantalla completa sean BLANCOS BRILLANTES */
+        /* TRUCO DE FILTRO INVERSO: Convierte los iconos internos en blanco sin volverlos cuadrados */
         div[data-testid="stElementToolbar"] svg, 
-        div[data-testid="stElementToolbar"] button, 
-        div[data-testid="stElementToolbar"] *,
         [data-testid="stElementToolbar"] button svg {
-            color: #ffffff !important;
-            fill: #ffffff !important;
-            -webkit-text-fill-color: #ffffff !important;
+            filter: invert(1) brightness(2) !important;
+            color: transparent !important;
+            background: transparent !important;
         }
         
         /* REPARAR CASILLA DE FECHA (FONDO BLANCO Y NÚMEROS NEGROS CLAROS) */
@@ -215,3 +212,4 @@ with tab_modificar:
 st.write("---")
 if st.button("🔒 Cerrar Sesión del Sistema"):
     st.session_state.autenticado = False
+    st.rerun()
