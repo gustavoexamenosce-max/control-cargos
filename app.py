@@ -2,14 +2,14 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, date
 
-# --- Configuración visual nativa estándar con Icono Médico Oficial en la pestaña ---
+# --- Configuración visual nativa estándar ---
 st.set_page_config(
     page_title="Control de Cargos", 
     layout="centered", 
     page_icon="🚑"
 )
 
-# --- 🎨 TUNEO CORREGIDO: MÁXIMA VISIBILIDAD DE LOGO Y DETALLES ---
+# --- 🎨 TUNEO DEFINTIVO: FONDO CELESTE PASTEL Y REPARACIÓN DE LETRAS ---
 st.markdown("""
     <style>
         /* OBLIGAR FONDO CELESTE PASTEL BAJITO EN TODA LA APLICACIÓN */
@@ -17,10 +17,24 @@ st.markdown("""
             background-color: #e3f2fd !important;
         }
         
-        /* OCULTAR ÚNICAMENTE EL EMBLEMA TÉCNICO DE CACHÉ INTERNO */
-        .stCache {
+        /* BORRAR POR COMPLETO LA BARRA SUPERIOR GENERAL (ICONO DE HOJA Y EL CERO) */
+        header, [data-testid="stHeader"], div[data-testid="stDecoration"], .stCache {
             display: none !important;
             visibility: hidden !important;
+            height: 0px !important;
+            opacity: 0 !important;
+        }
+        
+        /* REPARAR EL RECUADRITO MISTERIOSO FLOTANTE DE LA TABLA (BUSCADOR Y DESCARGA) */
+        div[data-testid="stElementToolbar"] {
+            background-color: #0b3c5d !important; /* Fondo azul fuerte para que resalte */
+            border-radius: 8px !important;
+            padding: 4px !important;
+        }
+        /* Forzar que todos los iconos y textos de ese recuadrito flotante sean BLANCOS */
+        div[data-testid="stElementToolbar"] *, div[data-testid="stElementToolbar"] button {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
         }
         
         /* REPARAR CASILLA DE FECHA (FONDO BLANCO Y NÚMEROS NEGROS CLAROS) */
@@ -103,22 +117,15 @@ if not st.session_state.autenticado:
     )
     st.stop()
 
-# --- Botón de cerrar sesión en la barra lateral ---
-if st.sidebar.button("🔒 Cerrar Sesión"):
-    st.session_state.autenticado = False
-    st.rerun()
-
-# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO ASEGURADO INMUNE A CAÍDAS ---
-# Usamos columnas nativas balanceadas para colocar el logo médico de forma limpia al costado del título
-col1, col2 = st.columns([1, 4])
+# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO CORREGIDO ---
+col1, col2 = st.columns(2)
 with col1:
-    # Icono médico institucional universal de alta visibilidad que nunca falla
     st.markdown("<h1 style='font-size: 55px; margin: 0px;'>🚑</h1>", unsafe_allow_html=True)
 with col2:
-    st.markdown("<h2 style='margin-top: 5px; margin-bottom: 0px;'>Hospital Regional Docente Las Mercedes Chiclayo</h2>", unsafe_allow_html=True)
-    st.markdown("<h4 style='color: #328cc1; margin-top: 0px; margin-bottom: 0px;'> Almacén de Farmacia - Entrega de Cargos</h4>", unsafe_allow_html=True)
+    st.markdown("<h2 style='margin-top: 0px; margin-bottom: 0px;'>Hospital Regional Docente Las Mercedes Chiclayo</h2>", unsafe_allow_html=True)
+    st.markdown("<h4 style='margin-top: 0px; margin-bottom: 0px;'>Control de Cargos de Pecosas</h4>", unsafe_allow_html=True)
 
-st.caption("* Gustavo Taboada B")
+st.caption("Gustavo Taboada B.")
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
