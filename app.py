@@ -46,7 +46,7 @@ st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospit
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
-URL_CSV = "import streamlit as st
+URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzt4dQwOVkz-ncXFWwGyWY6tt6xqAhgubPsBNSM7EE8asRvtTQ8KFYBPnFkd9kFg_dhmlyciWeHcwI/pub?output=csv"
 import pandas as pd
 from datetime import datetime, date
 
