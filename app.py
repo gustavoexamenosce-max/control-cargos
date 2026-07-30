@@ -25,15 +25,21 @@ st.markdown("""
             opacity: 0 !important;
         }
         
-        /* REPARAR EL RECUADRITO MISTERIOSO FLOTANTE DE LA TABLA (BUSCADOR Y DESCARGA) */
-        div[data-testid="stElementToolbar"] {
-            background-color: #0b3c5d !important; /* Fondo azul fuerte para que resalte */
+        /* REPARAR EL RECUADRITO MISTERIOSO FLOTANTE DE LA TABLA (EL OJO, LUPA, DESCARGA) */
+        div[data-testid="stElementToolbar"], [data-testid="stElementToolbar"] {
+            background-color: #0b3c5d !important; /* Fondo azul fuerte para ganarle al blanco */
             border-radius: 8px !important;
             padding: 4px !important;
+            opacity: 1 !important;
         }
-        /* Forzar que todos los iconos y textos de ese recuadrito flotante sean BLANCOS */
-        div[data-testid="stElementToolbar"] *, div[data-testid="stElementToolbar"] button {
+        
+        /* Forzar que el ojo, la lupa, la descarga y la pantalla completa sean BLANCOS BRILLANTES */
+        div[data-testid="stElementToolbar"] svg, 
+        div[data-testid="stElementToolbar"] button, 
+        div[data-testid="stElementToolbar"] *,
+        [data-testid="stElementToolbar"] button svg {
             color: #ffffff !important;
+            fill: #ffffff !important;
             -webkit-text-fill-color: #ffffff !important;
         }
         
@@ -138,7 +144,7 @@ except Exception as e:
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
-         7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+         7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
 # --- 🚀 MENÚ HORIZONTAL DE ICONOS SUPERIORES ---
 tab_registrar, tab_consultar, tab_modificar = st.tabs(["📥 Registrar", "🔍 Consultar", "✏️ Modificar"])
@@ -209,4 +215,3 @@ with tab_modificar:
 st.write("---")
 if st.button("🔒 Cerrar Sesión del Sistema"):
     st.session_state.autenticado = False
-    st.rerun()
