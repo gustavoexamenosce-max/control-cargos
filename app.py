@@ -54,9 +54,9 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
 
 # --- ENCABEZADO INSTITUCIONAL ---
 st.image("https://regionlambayeque.gob.pe", width=90)
-st.title("📋 Hospital Regional Docente Las Mercedes Chiclayo")
-st.subheader("Control de Cargos de Pecosas")
-st.caption("Gustavo Taboada B - Almacen de Farmacia - Entrega de Cargos")
+st.title("📋 Control de Cargos de Pecosas")
+st.subheader("Chiclayo")
+st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
@@ -69,7 +69,7 @@ except Exception as e:
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
-         7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+         7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
 opcion = st.sidebar.selectbox("MENÚ PRINCIPAL", ["📥 Registrar Cargo", "🔍 Consultar Cargos", "✏️ Modificar / Actualizar"])
 
