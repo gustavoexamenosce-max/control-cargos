@@ -9,7 +9,7 @@ st.set_page_config(
     page_icon="🚑"
 )
 
-# --- 🎨 TUNEO CORREGIDO: MÁXIMA VISIBILIDAD DE ICONOS DE TABLA ---
+# --- 🎨 TUNEO DEFINITIVO Y LIMPIO: MÁXIMA LEGIBILIDAD EN MÓVILES ---
 st.markdown("""
     <style>
         /* OBLIGAR FONDO CELESTE PASTEL BAJITO EN TODA LA APLICACIÓN */
@@ -25,19 +25,13 @@ st.markdown("""
             opacity: 0 !important;
         }
         
-        /* REPARAR EL RECUADRITO MISTERIOSO FLOTANTE DE LA TABLA (EL OJO, LUPA, DESCARGA) */
-        div[data-testid="stElementToolbar"], [data-testid="stElementToolbar"] {
-            background-color: #0b3c5d !important; /* Fondo azul fuerte institucional */
-            border-radius: 8px !important;
-            padding: 4px !important;
-        }
-        
-        /* TRUCO DE FILTRO INVERSO: Convierte los iconos internos en blanco sin volverlos cuadrados */
-        div[data-testid="stElementToolbar"] svg, 
-        [data-testid="stElementToolbar"] button svg {
-            filter: invert(1) brightness(2) !important;
-            color: transparent !important;
-            background: transparent !important;
+        /* 🚫 ELIMINAR POR COMPLETO LA BARRA FLOTANTE DEFECTUOSA DE LA TABLA (MISTERIOSO RECUADRO) */
+        [data-testid="stElementToolbar"], div[data-testid="stElementToolbar"] {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0px !important;
+            width: 0px !important;
+            opacity: 0 !important;
         }
         
         /* REPARAR CASILLA DE FECHA (FONDO BLANCO Y NÚMEROS NEGROS CLAROS) */
