@@ -112,7 +112,7 @@ with col2:
     st.markdown("<h2 style='margin-top: 0px; margin-bottom: 0px;'>Hospital Regional Docente Las Mercedes Chiclayo</h2>", unsafe_allow_html=True)
     st.markdown("<h4 style='margin-top: 0px; margin-bottom: 0px;'>Control de Cargos de Pecosas</h4>", unsafe_allow_html=True)
 
-st.caption("Gustavo Taboada B.")
+st.caption("😎 Gustavo Taboada B.")
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
