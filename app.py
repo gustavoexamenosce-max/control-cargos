@@ -9,51 +9,46 @@ st.set_page_config(
     page_icon="https://wikimedia.org"
 )
 
-# --- 🎨 DISEÑO DE COLORES INSTITUCIONALES (AZUL CLÍNICO Y BLANCO) ---
+# --- 🎨 CONFIGURACIÓN DE COLORES DE ALTA VISIBILIDAD (TEXTOS NEGROS) ---
 st.markdown("""
     <style>
-        /* Fondo blanco permanente en la aplicación */
-        .stApp {
-            background-color: #ffffff !important;
+        /* Forzar que todos los textos, etiquetas y párrafos de la página sean NEGRO PURO */
+        html, body, [data-testid="stAppViewContainer"], .stMarkdown, p, label, span, caption {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+        }
+        
+        /* Pintar los títulos grandes en un azul oscuro bien visible */
+        h1, h2, h3, h4, h5, h6 {
+            color: #0b3c5d !important;
+            -webkit-text-fill-color: #0b3c5d !important;
+            font-weight: bold !important;
+        }
+
+        /* Estilizar las pestañas del menú de arriba para que tengan letras negras y grandes */
+        button[data-baseweb="tab"] p {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+        }
+        
+        /* Color cuando una pestaña superior está seleccionada */
+        button[data-baseweb="tab"][aria-selected="true"] p {
+            color: #328cc1 !important;
+            -webkit-text-fill-color: #328cc1 !important;
+        }
+
+        /* Estilizar las cajas donde se escribe (Inputs) para que el texto digitado sea negro */
+        .stTextInput input, .stNumberInput input, .stSelectbox div {
+            color: #000000 !important;
+            background-color: #f4f6f7 !important; /* Fondo gris suave para que resalte la casilla */
+            -webkit-text-fill-color: #000000 !important;
         }
         
         /* Ocultar barra de herramientas técnica superior */
         [data-testid="stHeader"] .stCache, .stCache {
             display: none !important;
-        }
-        
-        /* Barra lateral en color Azul Institucional (Donde está Cerrar Sesión) */
-        [data-testid="stSidebar"] {
-            background-color: #0b3c5d !important;
-        }
-        [data-testid="stSidebar"] * {
-            color: #ffffff !important;
-        }
-        
-        /* Estilizar los botones en Azul Clínico */
-        div.stButton > button, div.stFormSubmitButton > button, .stDownloadButton > button {
-            background-color: #328cc1 !important;
-            color: white !important;
-            border-radius: 12px !important;
-            border: none !important;
-            font-weight: bold !important;
-        }
-        
-        /* Cuadro de la lupa con fondo gris claro y letras oscuras bien legibles */
-        div[data-testid="stTextInput"] input {
-            color: #000000 !important;
-            background-color: #f0f2f6 !important;
-        }
-        
-        /* ESTILO PARA LAS PESTAÑAS SUPERIORES (MENU DE ICONOS ARRIBA) */
-        button[data-baseweb="tab"] {
-            font-size: 14px !important;
-            font-weight: bold !important;
-            color: #0b3c5d !important;
-        }
-        button[data-baseweb="tab"][aria-selected="true"] {
-            color: #328cc1 !important;
-            border-bottom-color: #328cc1 !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -71,7 +66,7 @@ def verificar_password():
 
 # Si NO está autenticado, mostramos la pantalla de bloqueo
 if not st.session_state.autenticado:
-    st.markdown("<h2 style='text-align: center; color: #0b3c5d;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: gray;'>Introduce la clave de acceso para el Control de Cargos</p>", unsafe_allow_html=True)
     
     st.text_input(
@@ -90,10 +85,10 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
 # --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO DIGITAL ---
 col1, col2 = st.columns([1, 4])
 with col1:
-    st.image("https://flaticon.com", width=70)
+    st.image("https://flaticon.com", width=65)
 with col2:
-    st.markdown("<h2 style='margin-top: 5px; margin-bottom: 0px; color: #0b3c5d;'>Control de Cargos de Pecosas</h2>", unsafe_allow_html=True)
-    st.markdown("<h4 style='color: #328cc1; margin-top: 0px; margin-bottom: 0px;'>Chiclayo</h4>", unsafe_allow_html=True)
+    st.markdown("<h2 style='margin-top: 0px; margin-bottom: 0px;'>Control de Cargos de Pecosas</h2>", unsafe_allow_html=True)
+    st.markdown("<h4 style='margin-top: 0px; margin-bottom: 0px;'>Chiclayo</h4>", unsafe_allow_html=True)
 
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
 st.write("---")
@@ -110,7 +105,7 @@ except Exception as e:
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
          7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
-# --- 🚀 NUEVO MENÚ HORIZONTAL DE ICONOS SUPERIORES ---
+# --- 🚀 MENÚ HORIZONTAL DE ICONOS SUPERIORES ---
 tab_registrar, tab_consultar, tab_modificar = st.tabs(["📥 Registrar", "🔍 Consultar", "✏️ Modificar"])
 
 # ==========================================
