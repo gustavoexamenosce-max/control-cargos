@@ -146,7 +146,7 @@ if tab_registrar:
     with tab_registrar:
         st.header("📥 Registro de Entrega de Guía / Cargo")
         with st.form("form_registro", clear_on_submit=True):
-            fecha = st.date_input("Fecha de Recepción del Documento:", date.today())
+            fecha = st.date_input("Fecha de Recepción del Documento:", date.today(), format="DD/MM/YYYY")
             emp_transporte = st.text_input("Empresa de Transporte:")
             guia_transporte = st.text_input("Número de Guía de Transporte:")
             emp_proveedor = st.text_input("Empresa Proveedor:")
