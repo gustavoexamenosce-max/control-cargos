@@ -2,24 +2,13 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, date
 
-# --- Configuración visual nativa estándar ---
+# --- Configuración visual nativa estándar (Usamos un emoji nativo infalible) ---
 st.set_page_config(
     page_title="Control de Cargos", 
     layout="centered", 
-    page_icon="https://wikimedia.org"
+    page_icon="📋"
 )
-# --- OCULTAR ÚNICAMENTE EL ICONO DE LA HOJA Y EL CERO ---
-st.markdown("""
-    <style>
-        /* Apaga la decoración del indicador de caché manteniendo el botón del menú vivo */
-        .stCache, div[class*="stCache"], iframe[title*="cache"], [data-testid="stHeader"] .stCache {
-            display: none !important;
-            visibility: hidden !important;
-            width: 0px !important;
-            height: 0px !important;
-        }
-    </style>
-""", unsafe_allow_html=True)
+
 # --- CONTROL DE ACCESO (SISTEMA DE CONTRASEÑA) ---
 if "autenticado" not in st.session_state:
     st.session_state.autenticado = False
@@ -49,10 +38,9 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
     st.session_state.autenticado = False
     st.rerun()
 
-# --- ENCABEZADO INSTITUCIONAL ---
-st.image("https://regionlambayeque.gob.pe", width=90)
-st.title("📋 Control de Cargos de Pecosas")
-st.subheader("Chiclayo")
+# --- ENCABEZADO REPARADO Y LIMPIO ---
+st.markdown("<h1 style='margin-bottom: 0px;'>📋 Control de Cargos</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='color: #328cc1; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
 st.write("---")
 
@@ -112,13 +100,12 @@ elif opcion == "🔍 Consultar Cargos":
     if df_actual.empty or "html" in str(df_actual.columns).lower():
         st.warning("No hay cargos registrados o la hoja no es pública.")
     else:
-        # TÍTULO CLARO EN EL BUSCADOR PARA SABER DÓNDE ESCRIBIR
         filtro_busqueda = st.text_input("Escribe aquí el Proveedor o Guía para buscar:")
         df_filtrado = df_actual.copy()
         if filtro_busqueda:
             df_filtrado = df_filtrado[
-                df_filtrado["Empresa_Proveedor"].astype(str).str.contains(filtro_busqueda, case=False) | 
-                df_filtrado["Guia_Proveedor"].astype(str).str.contains(filtro_busqueda, case=False)
+                df_filtrado[f"Empresa_Proveedor"].astype(str).str.contains(filtro_busqueda, case=False) | 
+                df_filtrado[f"Guia_Proveedor"].astype(str).str.contains(filtro_busqueda, case=False)
             ]
         
         st.dataframe(df_filtrado, use_container_width=True)
