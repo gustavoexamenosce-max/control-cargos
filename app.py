@@ -116,7 +116,7 @@ with col1:
     st.markdown("<h1 style='font-size: 55px; margin: 0px;'>🚑</h1>", unsafe_allow_html=True)
 with col2:
     st.markdown("<h2 style='margin-top: 5px; margin-bottom: 0px;'>Hospital Regional Docente Las Mercedes Chiclayo</h2>", unsafe_allow_html=True)
-    st.markdown("<h4 style='color: #328cc1; margin-top: 0px; margin-bottom: 0px;'>Chiclayo</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color: #328cc1; margin-top: 0px; margin-bottom: 0px;'> * Gustavo Taboada B</h4>", unsafe_allow_html=True)
 
 st.caption("Almacén de Farmacia - Entrega de Cargos")
 st.write("---")
