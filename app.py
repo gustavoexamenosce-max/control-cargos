@@ -6,7 +6,7 @@ from datetime import datetime, date
 st.set_page_config(
     page_title="Control de Cargos", 
     layout="centered", 
-    page_icon="⚕️"
+    page_icon="🚑"
 )
 
 # --- 🎨 TUNEO CORREGIDO: MÁXIMA VISIBILIDAD DE LOGO Y DETALLES ---
@@ -113,12 +113,12 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
 col1, col2 = st.columns([1, 4])
 with col1:
     # Icono médico institucional universal de alta visibilidad que nunca falla
-    st.markdown("<h1 style='font-size: 55px; margin: 0px;'>⚕️</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='font-size: 55px; margin: 0px;'>🚑</h1>", unsafe_allow_html=True)
 with col2:
-    st.markdown("<h2 style='margin-top: 5px; margin-bottom: 0px;'>Control de Cargos de Pecosas</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='margin-top: 5px; margin-bottom: 0px;'>Hospital Regional Docente Las Mercedes Chiclayo</h2>", unsafe_allow_html=True)
     st.markdown("<h4 style='color: #328cc1; margin-top: 0px; margin-bottom: 0px;'>Chiclayo</h4>", unsafe_allow_html=True)
 
-st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
+st.caption("Almacén de Farmacia - Entrega de Cargos")
 st.write("---")
 
 # --- CONEXIÓN DE EXPORTACIÓN DIRECTA ---
