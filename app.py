@@ -2,14 +2,14 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, date
 
-# --- Configuración visual nativa estándar ---
+# --- Configuración visual nativa estándar con Icono Médico Oficial en la pestaña ---
 st.set_page_config(
     page_title="Control de Cargos", 
     layout="centered", 
-    page_icon="https://wikimedia.org"
+    page_icon="⚕️"
 )
 
-# --- 🎨 TUNEO DEFINTIVO: SOLUCIÓN DE ALERTAS VISUALES ---
+# --- 🎨 TUNEO CORREGIDO: MÁXIMA VISIBILIDAD DE LOGO Y DETALLES ---
 st.markdown("""
     <style>
         /* OBLIGAR FONDO CELESTE PASTEL BAJITO EN TODA LA APLICACIÓN */
@@ -17,19 +17,10 @@ st.markdown("""
             background-color: #e3f2fd !important;
         }
         
-        /* BORRAR POR COMPLETO LA BARRA SUPERIOR (ICONO DE HOJA Y EL CERO) */
-        header, [data-testid="stHeader"], div[data-testid="stDecoration"], .stCache {
+        /* OCULTAR ÚNICAMENTE EL EMBLEMA TÉCNICO DE CACHÉ INTERNO */
+        .stCache {
             display: none !important;
             visibility: hidden !important;
-            height: 0px !important;
-            opacity: 0 !important;
-        }
-        
-        /* OCULTAR TOTALMENTE LA BARRA LATERAL IZQUIERDA PARA LIMPIAR LA PANTALLA */
-        [data-testid="stSidebar"], section[data-testid="stSidebarViewContainer"] {
-            display: none !important;
-            visibility: hidden !important;
-            width: 0px !important;
         }
         
         /* REPARAR CASILLA DE FECHA (FONDO BLANCO Y NÚMEROS NEGROS CLAROS) */
@@ -112,13 +103,20 @@ if not st.session_state.autenticado:
     )
     st.stop()
 
-# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO CORREGIDO ---
+# --- Botón de cerrar sesión en la barra lateral ---
+if st.sidebar.button("🔒 Cerrar Sesión"):
+    st.session_state.autenticado = False
+    st.rerun()
+
+# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO ASEGURADO INMUNE A CAÍDAS ---
+# Usamos columnas nativas balanceadas para colocar el logo médico de forma limpia al costado del título
 col1, col2 = st.columns([1, 4])
 with col1:
-    st.image("https://flaticon.com", width=60)
+    # Icono médico institucional universal de alta visibilidad que nunca falla
+    st.markdown("<h1 style='font-size: 55px; margin: 0px;'>⚕️</h1>", unsafe_allow_html=True)
 with col2:
-    st.markdown("<h2 style='margin-top: 0px; margin-bottom: 0px;'>Control de Cargos de Pecosas</h2>", unsafe_allow_html=True)
-    st.markdown("<h4 style='margin-top: 0px; margin-bottom: 0px;'>Chiclayo</h4>", unsafe_allow_html=True)
+    st.markdown("<h2 style='margin-top: 5px; margin-bottom: 0px;'>Control de Cargos de Pecosas</h2>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color: #328cc1; margin-top: 0px; margin-bottom: 0px;'>Chiclayo</h4>", unsafe_allow_html=True)
 
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
 st.write("---")
