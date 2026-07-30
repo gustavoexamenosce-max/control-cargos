@@ -9,44 +9,62 @@ st.set_page_config(
     page_icon="https://wikimedia.org"
 )
 
-# --- 🎨 CONFIGURACIÓN DE COLORES DE ALTA VISIBILIDAD (TEXTOS NEGROS) ---
+# --- 🎨 TUNEO FIJO: FONDO CELESTE PASTEL BAJITO Y LETRAS OSCURAS ---
 st.markdown("""
     <style>
-        /* Forzar que todos los textos, etiquetas y párrafos de la página sean NEGRO PURO */
-        html, body, [data-testid="stAppViewContainer"], .stMarkdown, p, label, span, caption {
-            color: #000000 !important;
-            -webkit-text-fill-color: #000000 !important;
+        /* OBLIGAR FONDO CELESTE PASTEL BAJITO EN TODA LA APLICACIÓN */
+        .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
+            background-color: #e3f2fd !important;
         }
         
-        /* Pintar los títulos grandes en un azul oscuro bien visible */
+        /* FORZAR TEXTOS Y ETIQUETAS EN AZUL MARINO OSCURO PARA MÁXIMO CONTRASTE */
+        html, body, .stMarkdown, p, label, span, caption, .stCaption {
+            color: #0d233a !important;
+            -webkit-text-fill-color: #0d233a !important;
+            font-weight: 500 !important;
+        }
+        
+        /* TÍTULOS EN AZUL INSTITUCIONAL FUERTE */
         h1, h2, h3, h4, h5, h6 {
             color: #0b3c5d !important;
             -webkit-text-fill-color: #0b3c5d !important;
             font-weight: bold !important;
         }
 
-        /* Estilizar las pestañas del menú de arriba para que tengan letras negras y grandes */
+        /* PESTAÑAS DEL MENÚ SUPERIOR (LETRAS BIEN OSCURAS Y LEGIBLES) */
         button[data-baseweb="tab"] p {
-            color: #000000 !important;
-            -webkit-text-fill-color: #000000 !important;
+            color: #0d233a !important;
+            -webkit-text-fill-color: #0d233a !important;
             font-size: 16px !important;
             font-weight: bold !important;
         }
         
-        /* Color cuando una pestaña superior está seleccionada */
+        /* Color de la pestaña seleccionada */
         button[data-baseweb="tab"][aria-selected="true"] p {
-            color: #328cc1 !important;
-            -webkit-text-fill-color: #328cc1 !important;
+            color: #0077b6 !important;
+            -webkit-text-fill-color: #0077b6 !important;
         }
 
-        /* Estilizar las cajas donde se escribe (Inputs) para que el texto digitado sea negro */
+        /* CAJAS DE TEXTO (INPUTS) CON FONDO BLANCO Y LETRAS NEGRAS */
         .stTextInput input, .stNumberInput input, .stSelectbox div {
             color: #000000 !important;
-            background-color: #f4f6f7 !important; /* Fondo gris suave para que resalte la casilla */
+            background-color: #ffffff !important;
             -webkit-text-fill-color: #000000 !important;
+            border: 2px solid #328cc1 !important;
+            border-radius: 8px !important;
         }
         
-        /* Ocultar barra de herramientas técnica superior */
+        /* BOTONES EN AZUL CLÍNICO SEGURO */
+        div.stButton > button, div.stFormSubmitButton > button, .stDownloadButton > button {
+            background-color: #328cc1 !important;
+            color: white !important;
+            -webkit-text-fill-color: white !important;
+            border-radius: 12px !important;
+            border: none !important;
+            font-weight: bold !important;
+        }
+        
+        /* Ocultar barra de herramientas superior técnica */
         [data-testid="stHeader"] .stCache, .stCache {
             display: none !important;
         }
@@ -67,7 +85,7 @@ def verificar_password():
 # Si NO está autenticado, mostramos la pantalla de bloqueo
 if not st.session_state.autenticado:
     st.markdown("<h2 style='text-align: center;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: gray;'>Introduce la clave de acceso para el Control de Cargos</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Introduce la clave de acceso para el Control de Cargos</p>", unsafe_allow_html=True)
     
     st.text_input(
         "Contraseña del Sistema:", 
@@ -83,7 +101,7 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
     st.rerun()
 
 # --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO DIGITAL ---
-col1, col2 = st.columns([1, 4])
+col1, col2 = st.columns()
 with col1:
     st.image("https://flaticon.com", width=65)
 with col2:
@@ -103,7 +121,7 @@ except Exception as e:
     df_actual = pd.DataFrame(columns=["ID", "Fecha_Ingreso", "Empresa_Transporte", "Guia_Transporte", "Empresa_Proveedor", "Guia_Proveedor", "Pecosa", "Cantidad", "Importe", "Mes", "Recibido_Por", "Estado"])
 
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
-         7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
+         7: "Julio", 8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
 # --- 🚀 MENÚ HORIZONTAL DE ICONOS SUPERIORES ---
 tab_registrar, tab_consultar, tab_modificar = st.tabs(["📥 Registrar", "🔍 Consultar", "✏️ Modificar"])
