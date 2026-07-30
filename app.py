@@ -2,12 +2,61 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, date
 
-# --- Configuración visual nativa estándar (Usamos un emoji nativo infalible) ---
+# --- Configuración visual nativa estándar ---
 st.set_page_config(
     page_title="Control de Cargos", 
     layout="centered", 
-    page_icon="📋"
+    page_icon="https://wikimedia.org"
 )
+
+# --- 🎨 DISEÑO DE COLORES INSTITUCIONALES (AZUL CLÍNICO Y BLANCO) ---
+st.markdown("""
+    <style>
+        /* Fondo blanco permanente en la aplicación */
+        .stApp {
+            background-color: #ffffff !important;
+        }
+        
+        /* Ocultar barra de herramientas técnica superior */
+        [data-testid="stHeader"] .stCache, .stCache {
+            display: none !important;
+        }
+        
+        /* Barra lateral en color Azul Institucional (Donde está Cerrar Sesión) */
+        [data-testid="stSidebar"] {
+            background-color: #0b3c5d !important;
+        }
+        [data-testid="stSidebar"] * {
+            color: #ffffff !important;
+        }
+        
+        /* Estilizar los botones en Azul Clínico */
+        div.stButton > button, div.stFormSubmitButton > button, .stDownloadButton > button {
+            background-color: #328cc1 !important;
+            color: white !important;
+            border-radius: 12px !important;
+            border: none !important;
+            font-weight: bold !important;
+        }
+        
+        /* Cuadro de la lupa con fondo gris claro y letras oscuras bien legibles */
+        div[data-testid="stTextInput"] input {
+            color: #000000 !important;
+            background-color: #f0f2f6 !important;
+        }
+        
+        /* ESTILO PARA LAS PESTAÑAS SUPERIORES (MENU DE ICONOS ARRIBA) */
+        button[data-baseweb="tab"] {
+            font-size: 14px !important;
+            font-weight: bold !important;
+            color: #0b3c5d !important;
+        }
+        button[data-baseweb="tab"][aria-selected="true"] {
+            color: #328cc1 !important;
+            border-bottom-color: #328cc1 !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # --- CONTROL DE ACCESO (SISTEMA DE CONTRASEÑA) ---
 if "autenticado" not in st.session_state:
@@ -22,7 +71,7 @@ def verificar_password():
 
 # Si NO está autenticado, mostramos la pantalla de bloqueo
 if not st.session_state.autenticado:
-    st.markdown("<h2 style='text-align: center;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #0b3c5d;'>🔒 Sistema Protegido</h2>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: gray;'>Introduce la clave de acceso para el Control de Cargos</p>", unsafe_allow_html=True)
     
     st.text_input(
@@ -38,9 +87,14 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
     st.session_state.autenticado = False
     st.rerun()
 
-# --- ENCABEZADO REPARADO Y LIMPIO ---
-st.markdown("<h1 style='margin-bottom: 0px;'>📋 Control de Cargos</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='color: #328cc1; margin-top: 0px;'>Chiclayo</h3>", unsafe_allow_html=True)
+# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO DIGITAL ---
+col1, col2 = st.columns([1, 4])
+with col1:
+    st.image("https://flaticon.com", width=70)
+with col2:
+    st.markdown("<h2 style='margin-top: 5px; margin-bottom: 0px; color: #0b3c5d;'>Control de Cargos de Pecosas</h2>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color: #328cc1; margin-top: 0px; margin-bottom: 0px;'>Chiclayo</h4>", unsafe_allow_html=True)
+
 st.caption("Almacén de Recepción - Entrega de Documentos a Logística - Hospital Las Mercedes")
 st.write("---")
 
@@ -56,12 +110,13 @@ except Exception as e:
 MESES = {1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 
          7: "Julio", 8: "Agosto", 9: "Setiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"}
 
-opcion = st.sidebar.selectbox("MENÚ PRINCIPAL", ["📥 Registrar Cargo", "🔍 Consultar Cargos", "✏️ Modificar / Actualizar"])
+# --- 🚀 NUEVO MENÚ HORIZONTAL DE ICONOS SUPERIORES ---
+tab_registrar, tab_consultar, tab_modificar = st.tabs(["📥 Registrar", "🔍 Consultar", "✏️ Modificar"])
 
 # ==========================================
 # 1. MÓDULO DE INGRESO
 # ==========================================
-if opcion == "📥 Registrar Cargo":
+with tab_registrar:
     st.header("📥 Registro de Entrega de Guía / Cargo")
     
     with st.form("form_registro", clear_on_submit=True):
@@ -94,7 +149,7 @@ if opcion == "📥 Registrar Cargo":
 # ==========================================
 # 2. MÓDULO DE CONSULTA
 # ==========================================
-elif opcion == "🔍 Consultar Cargos":
+with tab_consultar:
     st.header("🔍 Archivo de Guías y Cargos Entregados")
     
     if df_actual.empty or "html" in str(df_actual.columns).lower():
@@ -104,8 +159,8 @@ elif opcion == "🔍 Consultar Cargos":
         df_filtrado = df_actual.copy()
         if filtro_busqueda:
             df_filtrado = df_filtrado[
-                df_filtrado[f"Empresa_Proveedor"].astype(str).str.contains(filtro_busqueda, case=False) | 
-                df_filtrado[f"Guia_Proveedor"].astype(str).str.contains(filtro_busqueda, case=False)
+                df_filtrado["Empresa_Proveedor"].astype(str).str.contains(filtro_busqueda, case=False) | 
+                df_filtrado["Guia_Proveedor"].astype(str).str.contains(filtro_busqueda, case=False)
             ]
         
         st.dataframe(df_filtrado, use_container_width=True)
@@ -116,6 +171,6 @@ elif opcion == "🔍 Consultar Cargos":
 # ==========================================
 # 3. MÓDULO DE MODIFICACIÓN
 # ==========================================
-elif opcion == "✏️ Modificar / Actualizar":
+with tab_modificar:
     st.header("✏️ Actualizar Estado de Entrega")
     st.info("Para modificar registros, edita directamente las celdas en tu archivo de Google Sheets. El celular actualizará los cambios de inmediato.")
