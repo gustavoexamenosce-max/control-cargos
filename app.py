@@ -100,8 +100,9 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
     st.session_state.autenticado = False
     st.rerun()
 
-# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO DIGITAL ---
-col1, col2 = st.columns()
+# --- ENCABEZADO INSTITUCIONAL CON LOGOTIPO CORREGIDO (LÍNEA 104 SOLUCIONADA) ---
+# Le agregamos el número 2 adentro para indicar 2 columnas de diseño
+col1, col2 = st.columns(2)
 with col1:
     st.image("https://flaticon.com", width=65)
 with col2:
