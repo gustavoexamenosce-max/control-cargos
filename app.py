@@ -6,7 +6,7 @@ from datetime import datetime, date
 st.set_page_config(
     page_title="Control de Cargos", 
     layout="centered", 
-    page_icon="https://regionlambayeque.gob.pe"
+    page_icon="https://wikimedia.org"
 )
 # --- OCULTAR ÚNICAMENTE EL ICONO DE LA HOJA Y EL CERO ---
 st.markdown("""
